@@ -29,7 +29,7 @@ pip install agent-context-hub
 Or install from source:
 
 ```bash
-git clone https://github.com/shivamakhauri/agent-context-hub.git
+git clone https://github.com/shivamakhauri04/agent-context-hub.git
 cd agent-context-hub
 pip install -e .
 ```

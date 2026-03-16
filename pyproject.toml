@@ -52,9 +52,9 @@ all = ["agent-context-hub[benchmark,mcp,dev]"]
 achub = "achub.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/shivamakhauri/agent-context-hub"
-Repository = "https://github.com/shivamakhauri/agent-context-hub"
-Issues = "https://github.com/shivamakhauri/agent-context-hub/issues"
+Homepage = "https://github.com/shivamakhauri04/agent-context-hub"
+Repository = "https://github.com/shivamakhauri04/agent-context-hub"
+Issues = "https://github.com/shivamakhauri04/agent-context-hub/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/achub"]
