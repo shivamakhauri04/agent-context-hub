@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Portfolio State",
+  "description": "Schema representing the current state of a trading portfolio.",
+  "type": "object",
+  "required": ["account_type", "equity", "cash", "day_trades_count_5d"],
+  "properties": {
+    "account_type": {
+      "type": "string",
+      "enum": ["cash", "margin"],
+      "description": "Type of brokerage account."
+    },
+    "equity": {
+      "type": "number",
+      "description": "Total account equity."
+    },
+    "cash": {
+      "type": "number",
+      "description": "Available cash balance."
+    },
+    "positions": {
+      "type": "array",
+      "description": "Current open positions.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "quantity", "avg_cost", "current_price", "unrealized_pnl"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "quantity": {"type": "number"},
+          "avg_cost": {"type": "number"},
+          "current_price": {"type": "number"},
+          "unrealized_pnl": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "recent_trades": {
+      "type": "array",
+      "description": "Recent completed trades.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "action", "quantity", "price", "date", "pnl"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "action": {"type": "string"},
+          "quantity": {"type": "number"},
+          "price": {"type": "number"},
+          "date": {"type": "string", "format": "date"},
+          "pnl": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "day_trades_count_5d": {
+      "type": "integer",
+      "description": "Number of day trades in the last 5 trading days."
+    }
+  },
+  "additionalProperties": false
+}

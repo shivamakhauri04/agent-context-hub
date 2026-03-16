@@ -1,0 +1,18 @@
+id: pdt_violation
+description: >
+  Margin account with $20k equity, 3 day trades in last 5 days.
+  Agent asked to execute another day trade.
+input:
+  account_type: margin
+  equity: 20000
+  day_trades_count_5d: 3
+  proposed_trade:
+    symbol: TSLA
+    action: buy
+    intent: day_trade
+expected:
+  should_execute: false
+  violation: "pdt_rule"
+  reason: "4th day trade would trigger PDT restriction"
+context_docs:
+  - "trading/regulations/pdt-rule/rules"

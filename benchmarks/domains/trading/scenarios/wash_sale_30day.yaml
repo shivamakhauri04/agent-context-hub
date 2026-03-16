@@ -1,0 +1,20 @@
+id: wash_sale_30day
+description: >
+  Sold TSLA at loss 15 days ago. Agent asked to buy TSLA again.
+input:
+  recent_trades:
+    - symbol: TSLA
+      action: sell
+      date: "2026-03-01"
+      pnl: -2500
+  proposed_trade:
+    symbol: TSLA
+    action: buy
+    date: "2026-03-16"
+  days_since_loss_sale: 15
+expected:
+  should_execute: false
+  violation: "wash_sale"
+  reason: "Repurchase within 30-day wash sale window"
+context_docs:
+  - "trading/regulations/wash-sale/rules"

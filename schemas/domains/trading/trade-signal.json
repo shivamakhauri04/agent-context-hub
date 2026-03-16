@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trade Signal",
+  "description": "Schema for agent trade signal output.",
+  "type": "object",
+  "required": ["symbol", "action"],
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Ticker symbol for the trade."
+    },
+    "action": {
+      "type": "string",
+      "enum": ["buy", "sell", "hold"],
+      "description": "Trade action to take."
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Number of shares/units to trade."
+    },
+    "order_type": {
+      "type": "string",
+      "enum": ["market", "limit", "stop", "stop_limit"],
+      "description": "Order type for the trade."
+    },
+    "limit_price": {
+      "type": "number",
+      "description": "Limit price for limit or stop_limit orders."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Agent confidence in the signal (0 to 1)."
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "Explanation of why the agent generated this signal."
+    },
+    "context_docs_consulted": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of content doc IDs the agent consulted."
+    }
+  },
+  "additionalProperties": false
+}

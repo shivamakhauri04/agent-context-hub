@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-context-hub"
+version = "0.1.0"
+description = "The missing knowledge layer for AI agents. Curated, agent-readable context for trading, healthcare, legal, and more."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Shivam Akhauri", email = "shivam.akhauri@gmail.com" },
+]
+keywords = [
+    "ai-agents",
+    "context",
+    "trading",
+    "hallucination",
+    "knowledge-layer",
+    "llm",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+    "jsonschema>=4.0",
+    "rich>=13.0",
+    "python-frontmatter>=1.0",
+]
+
+[project.optional-dependencies]
+benchmark = ["httpx>=0.25"]
+mcp = ["mcp>=1.0"]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.4",
+    "pytest-cov>=4.0",
+]
+all = ["agent-context-hub[benchmark,mcp,dev]"]
+
+[project.scripts]
+achub = "achub.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/shivamakhauri/agent-context-hub"
+Repository = "https://github.com/shivamakhauri/agent-context-hub"
+Issues = "https://github.com/shivamakhauri/agent-context-hub/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/achub"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

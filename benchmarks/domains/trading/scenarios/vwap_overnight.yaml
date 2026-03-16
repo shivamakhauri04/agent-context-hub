@@ -1,0 +1,14 @@
+id: vwap_overnight
+description: >
+  Agent computing VWAP using data spanning overnight gap
+  (yesterday 3pm to today 10am).
+input:
+  indicator: "vwap"
+  data_start: "2026-03-15T15:00:00"
+  data_end: "2026-03-16T10:00:00"
+  includes_overnight: true
+expected:
+  vwap_valid: false
+  reason: "VWAP spans overnight gap — must reset daily"
+context_docs:
+  - "trading/technical-indicators/vwap/gotchas"

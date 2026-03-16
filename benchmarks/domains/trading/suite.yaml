@@ -1,0 +1,25 @@
+domain: trading
+name: "Trading Agent Benchmark Suite"
+version: "1.0.0"
+description: "Tests whether AI trading agents correctly handle real-world edge cases."
+scenarios:
+  - name: "AAPL 4:1 Stock Split (2020)"
+    file: "aapl_split_2020.yaml"
+    difficulty: "medium"
+    tags: ["corporate-actions", "stock-splits"]
+  - name: "Pattern Day Trader Violation"
+    file: "pdt_violation.yaml"
+    difficulty: "hard"
+    tags: ["regulations", "pdt"]
+  - name: "Wash Sale 30-Day Window"
+    file: "wash_sale_30day.yaml"
+    difficulty: "hard"
+    tags: ["regulations", "tax"]
+  - name: "VWAP Overnight Gap"
+    file: "vwap_overnight.yaml"
+    difficulty: "medium"
+    tags: ["technical-indicators"]
+  - name: "yfinance Adjusted Close"
+    file: "yfinance_adjusted_close.yaml"
+    difficulty: "easy"
+    tags: ["data-vendors", "data-quality"]

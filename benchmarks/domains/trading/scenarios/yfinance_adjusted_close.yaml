@@ -1,0 +1,17 @@
+id: yfinance_adjusted_close
+description: >
+  Agent backtesting strategy using yfinance data for AAPL over period
+  including 2020 split. Pre-split close shows $125 not $500.
+input:
+  data_source: "yfinance"
+  symbol: "AAPL"
+  date: "2020-08-28"
+  reported_close: 124.81
+  expected_close_unadjusted: 499.23
+expected:
+  data_is_adjusted: true
+  adjustment_type: "split_adjusted"
+  should_use_for_backtest: true
+  should_use_for_live_comparison: false
+context_docs:
+  - "trading/data-vendors/yfinance/gotchas"

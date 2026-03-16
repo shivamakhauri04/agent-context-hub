@@ -1,0 +1,17 @@
+{
+  "account_type": "margin",
+  "equity": 20000,
+  "cash": 5000,
+  "positions": [
+    {"symbol": "AAPL", "quantity": 50, "avg_cost": 178.50, "current_price": 185.20, "unrealized_pnl": 335.0},
+    {"symbol": "MSFT", "quantity": 25, "avg_cost": 415.00, "current_price": 420.50, "unrealized_pnl": 137.50}
+  ],
+  "recent_trades": [
+    {"symbol": "TSLA", "action": "sell", "quantity": 10, "price": 165.00, "date": "2026-03-01", "pnl": -2500.00},
+    {"symbol": "NVDA", "action": "buy", "quantity": 5, "price": 890.00, "date": "2026-03-10", "pnl": 0},
+    {"symbol": "NVDA", "action": "sell", "quantity": 5, "price": 895.00, "date": "2026-03-10", "pnl": 25.00},
+    {"symbol": "SPY", "action": "buy", "quantity": 20, "price": 520.00, "date": "2026-03-12", "pnl": 0},
+    {"symbol": "SPY", "action": "sell", "quantity": 20, "price": 522.00, "date": "2026-03-12", "pnl": 40.00}
+  ],
+  "day_trades_count_5d": 3
+}

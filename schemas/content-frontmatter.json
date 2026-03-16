@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["id", "title", "domain", "version", "category", "tags", "severity", "last_verified"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9-]+(/[a-z0-9-]+)*$"},
+    "title": {"type": "string", "minLength": 5},
+    "domain": {"type": "string"},
+    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "category": {"type": "string"},
+    "tags": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "severity": {"type": "string", "enum": ["critical", "high", "medium", "low", "info", "CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]},
+    "last_verified": {"type": "string", "format": "date"},
+    "applies_to": {"type": "array", "items": {"type": "string"}},
+    "related": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

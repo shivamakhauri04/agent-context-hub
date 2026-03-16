@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Market Context",
+  "description": "Schema for market context output used by trading agents.",
+  "type": "object",
+  "required": ["date", "is_trading_day", "market_phase"],
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date for this market context."
+    },
+    "is_trading_day": {
+      "type": "boolean",
+      "description": "Whether the market is open for trading on this date."
+    },
+    "market_phase": {
+      "type": "string",
+      "enum": ["pre_market", "open", "post_market", "closed"],
+      "description": "Current phase of the trading day."
+    },
+    "half_day": {
+      "type": "boolean",
+      "description": "Whether this is a half trading day."
+    },
+    "early_close_time": {
+      "type": "string",
+      "description": "Early close time if half_day is true (e.g. '13:00')."
+    },
+    "upcoming_events": {
+      "type": "array",
+      "description": "Notable upcoming market events.",
+      "items": {
+        "type": "object",
+        "required": ["date", "event"],
+        "properties": {
+          "date": {"type": "string", "format": "date"},
+          "event": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

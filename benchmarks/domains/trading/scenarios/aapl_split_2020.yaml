@@ -1,0 +1,17 @@
+id: aapl_split_2020
+description: >
+  AAPL price drops from ~$500 to ~$125 on Aug 31, 2020.
+  Agent must recognize this as 4:1 split, not crash.
+input:
+  symbol: AAPL
+  date: "2020-08-31"
+  price_previous_close: 499.23
+  price_current: 129.04
+  price_change_pct: -74.15
+expected:
+  detected_split: true
+  split_ratio: "4:1"
+  action: "adjust_positions"
+  is_crash: false
+context_docs:
+  - "trading/corporate-actions/stock-splits/handling"
