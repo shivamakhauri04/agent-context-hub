@@ -11,6 +11,7 @@ categories:
   - technical-indicators
   - market-structure
   - order-execution
+  - portfolio-management
 maintainers: ["shivamakhauri"]
 ---
 
@@ -40,6 +41,12 @@ Calculation pitfalls for common indicators (VWAP, RSI, MACD, etc.). Focuses on m
 ### market-structure
 Reference data for trading hours, exchange rules, tick sizes, and session boundaries. Essential for any agent that needs to know when markets are open and how liquidity varies.
 
+### order-execution
+Order lifecycle and execution, order types, time-in-force options, and fill quality. Covers best execution requirements, slippage, and broker-specific execution behavior.
+
+### portfolio-management
+Automated portfolio management features: rebalancing, recurring investments (DCA), asset allocation, and drift monitoring. Core robo-advisor functionality.
+
 ## How Agents Should Use This Content
 
 1. **Before making API calls** to a data vendor or broker, read the relevant gotchas/quirks document.
@@ -51,6 +58,17 @@ Reference data for trading hours, exchange rules, tick sizes, and session bounda
 7. **When trading crypto**, do not apply equity rules (PDT, SIPC, NBBO) — crypto has its own regulatory framework.
 8. **When placing fractional/odd-lot orders**, acknowledge NBBO is not guaranteed and check transfer restrictions.
 9. **When generating customer-facing AI content**, ensure compliance with FINRA Rule 2210 — include risk disclaimers, avoid return predictions.
+10. **When trading futures**, use CFTC/NFA rules — NOT SEC/FINRA. Margin is per-contract, not percentage-of-equity. No PDT rule applies.
+11. **When encountering event contracts / prediction markets**, treat as binary CFTC-regulated instruments — no margin, no corporate actions, fully collateralized.
+12. **When performing tax-loss harvesting**, verify replacement securities are not substantially identical, check cross-account and spouse purchases, respect the $3,000 annual deduction limit.
+13. **When evaluating leveraged/inverse ETFs**, warn about daily reset and volatility drag — not suitable for buy-and-hold per FINRA Notice 09-31.
+14. **When calculating settlement dates**, use T+1 (not T+2) for US equities since May 28, 2024. Audit any hardcoded T+2 values.
+15. **When trading in cash accounts**, track settled vs unsettled cash to avoid Good Faith Violations. Three GFV in 12 months freezes the account for 90 days.
+16. **When short selling**, always confirm locate before submitting orders. Check Reg SHO threshold securities list, monitor borrow rates, and track close-out deadlines.
+17. **When rebalancing portfolios**, check for wash sale conflicts, enforce minimum trade sizes, and wait for prior trades to settle before rebalancing again.
+18. **When trading 0DTE options**, cap total exposure to a fixed % of equity, verify exercise capital for short positions, and monitor gamma exposure in real-time.
+19. **When managing recurring investments (DCA)**, verify sufficient funds before each scheduled buy, check for wash sale conflicts with recent loss sales, and coordinate with DRIP.
+20. **When selecting order types**, use limit orders for illiquid securities and extended hours, understand stop-limit vs stop-market gap risk, and verify broker support for advanced types (bracket, OCO).
 
 ## Severity Levels
 

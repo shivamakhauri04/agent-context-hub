@@ -8,6 +8,10 @@ The missing knowledge layer for AI agents. Curated, agent-readable context docum
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 ![Status: Alpha](https://img.shields.io/badge/status-alpha-orange)
 
+<p align="center">
+  <img src="assets/demo.gif" alt="achub CLI demo" width="800">
+</p>
+
 ---
 
 ## Why This Exists
@@ -71,20 +75,46 @@ achub get trading/regulations/wash-sale/rules --format llm
 | `json` | `--format json` | Structured output for programmatic consumption |
 | `llm` | `--format llm` | Token-efficient format optimized for LLM context windows |
 
-## What's Inside (Trading Launch)
+## What's Inside (Trading Domain)
 
-The trading domain ships with 8 curated content documents across 6 categories. Each document has been verified against primary sources and structured for agent consumption.
+The trading domain ships with **27 curated content documents** across 8 categories. Each document has been verified against primary sources and structured for agent consumption.
 
-| Content ID | Title | Severity | Description |
-|---|---|---|---|
-| `trading/regulations/pdt-rule/rules` | Pattern Day Trader (PDT) Rule | CRITICAL | FINRA Rule 4210 restricting day trades in margin accounts under $25k equity. Violation triggers 90-day freeze. |
-| `trading/regulations/wash-sale/rules` | IRS Wash Sale Rule | CRITICAL | 30-day window rule that disallows tax-loss harvesting on substantially identical securities. |
-| `trading/market-structure/trading-hours/reference` | US Equity Market Trading Hours | HIGH | NYSE/NASDAQ regular, pre-market, and after-hours sessions. Holiday schedule. |
-| `trading/broker-apis/alpaca/quirks` | Alpaca Broker API Quirks | HIGH | Paper vs live environment differences, order lifecycle edge cases, WebSocket gotchas. |
-| `trading/corporate-actions/stock-splits/handling` | Stock Split Detection and Handling | CRITICAL | How to detect splits, adjust historical prices, and avoid interpreting a 75% split as a crash. |
-| `trading/data-vendors/polygon/gotchas` | Polygon.io Integration Pitfalls | MEDIUM | Rate limits, data gaps, schema changes between API versions, timestamp timezone handling. |
-| `trading/data-vendors/yfinance/gotchas` | yfinance Silent Failures | HIGH | Adjusted vs unadjusted close confusion, silent NaN returns on delisted tickers, timezone issues. |
-| `trading/technical-indicators/vwap/gotchas` | VWAP Calculation Gotchas | MEDIUM | Overnight gap handling, intraday reset boundaries, volume weighting formula. |
+| Category | Docs | Content IDs |
+|---|---|---|
+| **regulations** | 15 | `pdt-rule`, `wash-sale`, `good-faith-violations`, `short-selling`, `zero-dte-options`, `options-trading`, `margin-requirements`, `futures-trading`, `crypto-trading`, `ira-retirement`, `tax-loss-harvesting`, `suitability`, `ai-communications`, `event-contracts`, `leveraged-inverse-etfs` |
+| **market-structure** | 3 | `trading-hours`, `t1-settlement`, `fractional-shares` |
+| **order-execution** | 2 | `order-types`, `best-execution` |
+| **portfolio-management** | 2 | `automated-rebalancing`, `recurring-investments` |
+| **data-vendors** | 2 | `polygon`, `yfinance` |
+| **broker-apis** | 1 | `alpaca` |
+| **corporate-actions** | 1 | `stock-splits` |
+| **technical-indicators** | 1 | `vwap` |
+
+### Compliance Checkers (10 rules)
+
+`achub check` runs Python-based compliance checkers against your portfolio JSON:
+
+| Rule | What it checks |
+|---|---|
+| `pdt` | Pattern Day Trader violations on margin accounts < $25k |
+| `wash-sale` | 30-day wash sale window across accounts, spouses, and substantially identical ETFs |
+| `gfv` | Good Faith Violations in cash accounts (unsettled funds, 3-strike rule) |
+| `short-selling` | Reg SHO locate requirement, margin maintenance, threshold securities, HTB rates |
+| `zero-dte` | 0DTE exercise cost vs equity, position sizing, options approval level |
+| `recurring` | DCA wash sale conflicts, monthly cost vs available cash |
+| `options` | Options approval level, naked calls, expiration capital |
+| `margin` | FINRA 25% maintenance, Reg T initial margin, house requirements |
+| `futures` | CFTC margin per contract, daily settlement exposure |
+| `ira` | Contribution limits, early withdrawal penalties, Roth income eligibility |
+
+```bash
+# Check a single rule
+achub check --domain trading --rules gfv --portfolio examples/sample_gfv_portfolio.json
+
+# Check multiple rules
+achub check --domain trading --rules pdt,wash-sale,gfv,short-selling,zero-dte,recurring \
+  --portfolio examples/sample_comprehensive_portfolio.json
+```
 
 ### Severity levels
 
@@ -244,7 +274,7 @@ See [achub.yaml.example](achub.yaml.example) for a full example.
 | `achub get <content_id>` | Retrieve a document by ID | `--format markdown\|json\|llm` |
 | `achub prompt` | Get mandatory check instructions for a domain | `--domain` |
 | `achub validate [path]` | Validate frontmatter against schema | `--all` for all files |
-| `achub check <portfolio>` | Run compliance checks (PDT, wash sale) | Portfolio as JSON input |
+| `achub check` | Run compliance checks (10 rules) | `--domain`, `--rules`, `--portfolio` |
 | `achub regime` | Current market regime and session info | Trading day status, hours |
 | `achub annotate <content_id>` | Add notes to a content document | Stored in `.achub/annotations/` |
 | `achub feedback <content_id>` | Rate and comment on content | Stored in `.achub/feedback/` |
@@ -266,6 +296,9 @@ achub get trading/corporate-actions/stock-splits/handling --format json
 
 # Validate all content across all domains
 achub validate --all
+
+# Run compliance checks against a portfolio
+achub check --domain trading --rules pdt,wash-sale,gfv --portfolio examples/sample_comprehensive_portfolio.json
 
 # Check current market status
 achub regime
@@ -339,7 +372,7 @@ See [docs/adding-a-domain.md](docs/adding-a-domain.md) for the full step-by-step
 
 | Operation | Time | Notes |
 |---|---|---|
-| `registry.build()` | ~50ms | 8 docs, O(n) with doc count |
+| `registry.build()` | ~50ms | 27 docs, O(n) with doc count |
 | `registry.search()` | <1ms | TF-IDF over current corpus |
 | Memory footprint | ~1MB | Index scales linearly with content |
 
@@ -349,7 +382,7 @@ No external APIs, no embedding models, no database. Pure Python TF-IDF.
 
 | Domain | Target | Status | Planned Content |
 |---|---|---|---|
-| Trading | Now | Shipped (v0.1.0) | 8 docs across regulations, market structure, broker APIs, corporate actions, data vendors, technical indicators |
+| Trading | Now | Shipped (v0.1.0) | 27 docs across regulations, market structure, order execution, portfolio management, broker APIs, corporate actions, data vendors, technical indicators |
 | Healthcare | Q2 2026 | In planning | Drug interactions, dosage calculations, contraindication rules, FDA compliance |
 | Legal | Q3 2026 | In planning | Contract review patterns, regulatory compliance checks, jurisdiction-specific rules |
 | Education | Q4 2026 | In planning | Curriculum standards, assessment validity rules, accessibility requirements (WCAG, Section 508) |

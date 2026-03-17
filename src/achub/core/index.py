@@ -26,8 +26,10 @@ _SYNONYM_MAP: dict[str, list[str]] = {
     "vwap": ["volume_weighted", "indicator", "technical"],
     "indicator": ["vwap", "rsi", "macd", "technical"],
     "fractional": ["yfinance", "shares", "partial", "odd_lot", "nbbo"],
-    "settlement": ["wash_sale", "t2", "clearing"],
-    "t2": ["settlement", "clearing", "wash_sale"],
+    "settlement": ["wash_sale", "t2", "t1", "t_plus_1", "clearing"],
+    "t2": ["settlement", "clearing", "wash_sale", "legacy"],
+    "t1": ["settlement", "clearing", "t_plus_1"],
+    "t_plus_1": ["settlement", "t1", "clearing"],
     "premarket": ["trading_hours", "extended_hours"],
     "afterhours": ["trading_hours", "extended_hours"],
     "drip": ["dividend", "reinvestment", "corporate_action"],
@@ -66,6 +68,66 @@ _SYNONYM_MAP: dict[str, list[str]] = {
     # AI compliance
     "chatbot": ["ai", "communications", "rule_2210"],
     "ai_compliance": ["finra_24_09", "communications", "rule_2210", "supervision"],
+    # Futures
+    "futures": ["cftc", "nfa", "contract", "margin", "mark_to_market", "rollover", "section_1256"],
+    "cftc": ["futures", "nfa", "commodity", "event_contract"],
+    "nfa": ["futures", "cftc", "commodity"],
+    "rollover": ["futures", "expiration", "contract"],
+    "mark_to_market": ["futures", "daily_settlement", "margin"],
+    "section_1256": ["futures", "tax", "60_40"],
+    # Event contracts
+    "event_contract": ["prediction_market", "binary", "cftc", "kalshi"],
+    "prediction": ["event_contract", "binary", "kalshi"],
+    "kalshi": ["event_contract", "prediction_market", "cftc"],
+    # Tax-loss harvesting
+    "harvesting": ["tax_loss_harvesting", "wash_sale", "replacement", "deduction"],
+    "tax_loss": ["harvesting", "wash_sale", "capital_loss", "deduction"],
+    "replacement": ["tax_loss_harvesting", "substantially_identical", "wash_sale"],
+    # Leveraged ETFs
+    "leveraged": ["leveraged_etf", "2x", "3x", "tqqq", "volatility_drag", "daily_reset"],
+    "inverse": ["inverse_etf", "sqqq", "short", "daily_reset"],
+    "tqqq": ["leveraged_etf", "3x", "nasdaq", "volatility_drag"],
+    "sqqq": ["inverse_etf", "3x", "nasdaq", "short"],
+    "volatility_drag": ["leveraged_etf", "compounding", "daily_reset"],
+    "daily_reset": ["leveraged_etf", "inverse_etf", "compounding"],
+    # Good Faith Violations
+    "gfv": ["good_faith_violation", "cash_account", "unsettled", "free_riding", "settlement"],
+    "good_faith_violation": ["gfv", "cash_account", "unsettled", "settlement"],
+    "free_riding": ["gfv", "good_faith_violation", "unsettled", "regulation_t"],
+    "unsettled": ["gfv", "settlement", "t_plus_1", "cash_account"],
+    # Short selling
+    "short_selling": ["reg_sho", "locate", "borrow", "forced_buy_in", "short"],
+    "short": ["short_selling", "reg_sho", "locate", "inverse"],
+    "reg_sho": ["short_selling", "locate", "threshold_securities", "close_out"],
+    "locate": ["short_selling", "reg_sho", "borrow", "failure_to_deliver"],
+    "borrow": ["short_selling", "hard_to_borrow", "locate", "borrow_rate"],
+    "forced_buy_in": ["short_selling", "reg_sho", "close_out", "margin"],
+    "uptick": ["rule_201", "short_selling", "circuit_breaker"],
+    # Rebalancing
+    "rebalance": ["drift", "allocation", "threshold", "tax_aware", "portfolio"],
+    "rebalancing": ["drift", "allocation", "threshold", "tax_aware", "portfolio"],
+    "drift": ["rebalance", "allocation", "threshold", "tolerance_band"],
+    "allocation": ["rebalance", "drift", "target", "asset_location"],
+    "asset_location": ["rebalance", "tax_efficient", "ira", "taxable"],
+    # 0DTE options
+    "zero_dte": ["0dte", "gamma", "pin_risk", "expiration", "intraday", "options"],
+    "0dte": ["zero_dte", "gamma", "pin_risk", "expiration", "options"],
+    "gamma": ["zero_dte", "0dte", "delta", "greeks", "options"],
+    "pin_risk": ["zero_dte", "0dte", "expiration", "assignment", "options"],
+    # Recurring / DCA
+    "recurring": ["dca", "dollar_cost_averaging", "automatic", "scheduled"],
+    "dca": ["recurring", "dollar_cost_averaging", "automatic"],
+    "dollar_cost_averaging": ["dca", "recurring", "periodic"],
+    "automatic": ["recurring", "dca", "scheduled"],
+    # Order types
+    "order_type": ["market_order", "limit_order", "stop_loss", "bracket", "oco"],
+    "market_order": ["order_type", "slippage", "fill", "immediate"],
+    "limit_order": ["order_type", "price", "extended_hours"],
+    "stop_loss": ["order_type", "stop_order", "trailing_stop", "protection"],
+    "trailing_stop": ["stop_loss", "order_type", "dynamic"],
+    "bracket": ["order_type", "take_profit", "stop_loss", "oco"],
+    "oco": ["order_type", "bracket", "one_cancels_other"],
+    "time_in_force": ["day", "gtc", "ioc", "fok"],
 }
 
 _SYNONYM_WEIGHT = 0.5

@@ -1,0 +1,65 @@
+{
+  "account_type": "margin",
+  "equity": 22000,
+  "cash": 3000,
+  "unsettled_cash": 1500,
+  "gfv_count_12m": 1,
+  "short_margin_equity": 8000,
+  "short_market_value": 35000,
+  "options_approval_level": 2,
+  "zero_dte_max_portfolio_pct": 0.05,
+  "threshold_securities": ["GME"],
+  "positions": [
+    {"symbol": "AAPL", "quantity": 30, "avg_cost": 185.00, "current_price": 190.00, "unrealized_pnl": 150.0},
+    {"symbol": "TSLA", "quantity": 10, "avg_cost": 170.00, "current_price": 175.00, "unrealized_pnl": 50.0},
+    {"symbol": "SPY", "quantity": 15, "avg_cost": 515.00, "current_price": 520.00, "unrealized_pnl": 75.0}
+  ],
+  "short_positions": [
+    {
+      "symbol": "GME",
+      "quantity": 100,
+      "entry_price": 28.00,
+      "current_price": 32.00,
+      "locate_obtained": true,
+      "is_threshold_security": true,
+      "days_short": 14,
+      "is_hard_to_borrow": true,
+      "borrow_rate_annualized": 75
+    },
+    {
+      "symbol": "MARA",
+      "quantity": 200,
+      "entry_price": 22.00,
+      "current_price": 24.00,
+      "locate_obtained": false,
+      "is_threshold_security": false,
+      "days_short": 2,
+      "is_hard_to_borrow": false,
+      "borrow_rate_annualized": 8
+    }
+  ],
+  "zero_dte_positions": [
+    {
+      "symbol": "SPX 5200P",
+      "direction": "short",
+      "contracts": 1,
+      "exercise_cost": 520000,
+      "max_loss": 5000,
+      "current_price": 4.20,
+      "strike": 5200
+    }
+  ],
+  "recurring_investments": [
+    {"symbol": "TSLA", "amount_usd": 75, "frequency": "weekly"},
+    {"symbol": "SPY", "amount_usd": 150, "frequency": "monthly"}
+  ],
+  "recent_trades": [
+    {"symbol": "TSLA", "action": "sell", "quantity": 15, "price": 160.00, "date": "2026-03-05", "pnl": -2250.0},
+    {"symbol": "TSLA", "action": "buy", "quantity": 10, "price": 170.00, "date": "2026-03-14", "pnl": 0},
+    {"symbol": "NVDA", "action": "buy", "quantity": 5, "price": 890.00, "date": "2026-03-10", "pnl": 0},
+    {"symbol": "NVDA", "action": "sell", "quantity": 5, "price": 895.00, "date": "2026-03-10", "pnl": 25.0},
+    {"symbol": "AMD", "action": "buy", "quantity": 20, "price": 175.00, "date": "2026-03-12", "pnl": 0},
+    {"symbol": "AMD", "action": "sell", "quantity": 20, "price": 176.50, "date": "2026-03-12", "pnl": 30.0}
+  ],
+  "day_trades_count_5d": 3
+}

@@ -1,0 +1,13 @@
+{
+  "account_type": "margin",
+  "equity": 35000,
+  "cash": 8000,
+  "positions": [
+    {"symbol": "TQQQ", "quantity": 200, "avg_cost": 55.00, "current_price": 48.00, "unrealized_pnl": -1400.00},
+    {"symbol": "SOXL", "quantity": 100, "avg_cost": 30.00, "current_price": 25.00, "unrealized_pnl": -500.00},
+    {"symbol": "AAPL", "quantity": 50, "avg_cost": 178.50, "current_price": 185.20, "unrealized_pnl": 335.00}
+  ],
+  "recent_trades": [],
+  "day_trades_count_5d": 1,
+  "settlement_days": 1
+}

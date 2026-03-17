@@ -1,0 +1,16 @@
+{
+  "account_type": "futures",
+  "equity": 50000,
+  "cash": 50000,
+  "asset_class": "futures",
+  "futures_account_balance": 50000,
+  "futures_day_trade": false,
+  "futures_positions": [
+    {"symbol": "/ES", "contracts": 2, "avg_entry_price": 5200.00, "current_price": 5180.00, "unrealized_pnl": -2000.00},
+    {"symbol": "/MNQ", "contracts": 5, "avg_entry_price": 18500.00, "current_price": 18450.00, "unrealized_pnl": -500.00}
+  ],
+  "positions": [],
+  "recent_trades": [],
+  "day_trades_count_5d": 0,
+  "settlement_days": 1
+}

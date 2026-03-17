@@ -1,0 +1,48 @@
+{
+  "account_type": "margin",
+  "equity": 100000,
+  "cash": 25000,
+  "short_margin_equity": 28000,
+  "short_market_value": 120000,
+  "threshold_securities": ["GME", "AMC"],
+  "short_positions": [
+    {
+      "symbol": "GME",
+      "quantity": 200,
+      "entry_price": 25.00,
+      "current_price": 30.00,
+      "locate_obtained": true,
+      "is_threshold_security": true,
+      "days_short": 15,
+      "is_hard_to_borrow": true,
+      "borrow_rate_annualized": 85
+    },
+    {
+      "symbol": "RIVN",
+      "quantity": 500,
+      "entry_price": 18.00,
+      "current_price": 20.50,
+      "locate_obtained": false,
+      "is_threshold_security": false,
+      "days_short": 3,
+      "is_hard_to_borrow": false,
+      "borrow_rate_annualized": 5
+    },
+    {
+      "symbol": "AMC",
+      "quantity": 300,
+      "entry_price": 8.00,
+      "current_price": 9.50,
+      "locate_obtained": true,
+      "is_threshold_security": true,
+      "days_short": 5,
+      "is_hard_to_borrow": true,
+      "borrow_rate_annualized": 62
+    }
+  ],
+  "positions": [
+    {"symbol": "AAPL", "quantity": 100, "avg_cost": 180.00, "current_price": 190.00, "unrealized_pnl": 1000.0}
+  ],
+  "recent_trades": [],
+  "day_trades_count_5d": 0
+}

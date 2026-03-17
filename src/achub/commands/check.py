@@ -9,9 +9,14 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
+from achub.commands.checkers.futures import check_futures_margin
+from achub.commands.checkers.gfv import check_gfv
 from achub.commands.checkers.ira import check_ira_compliance
 from achub.commands.checkers.margin import check_margin_maintenance
 from achub.commands.checkers.options import check_options_approval
+from achub.commands.checkers.recurring import check_recurring
+from achub.commands.checkers.short_selling import check_short_selling
+from achub.commands.checkers.zero_dte import check_zero_dte
 
 console = Console()
 
@@ -159,6 +164,11 @@ _RULE_CHECKERS = {
     "options": check_options_approval,
     "margin": check_margin_maintenance,
     "ira": check_ira_compliance,
+    "futures": check_futures_margin,
+    "gfv": check_gfv,
+    "short-selling": check_short_selling,
+    "zero-dte": check_zero_dte,
+    "recurring": check_recurring,
 }
 
 

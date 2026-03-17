@@ -188,6 +188,42 @@ def ira_portfolio() -> dict:
 
 
 @pytest.fixture()
+def futures_portfolio() -> dict:
+    """Return a portfolio for futures margin testing.
+
+    Futures account with /ES and /MNQ positions, $50k balance.
+    """
+    return {
+        "account_type": "futures",
+        "equity": 50000,
+        "cash": 50000,
+        "asset_class": "futures",
+        "futures_account_balance": 50000,
+        "futures_day_trade": False,
+        "futures_positions": [
+            {
+                "symbol": "/ES",
+                "contracts": 2,
+                "avg_entry_price": 5200.00,
+                "current_price": 5180.00,
+                "unrealized_pnl": -2000.00,
+            },
+            {
+                "symbol": "/MNQ",
+                "contracts": 5,
+                "avg_entry_price": 18500.00,
+                "current_price": 18450.00,
+                "unrealized_pnl": -500.00,
+            },
+        ],
+        "positions": [],
+        "recent_trades": [],
+        "day_trades_count_5d": 0,
+        "settlement_days": 1,
+    }
+
+
+@pytest.fixture()
 def margin_portfolio() -> dict:
     """Return a portfolio for margin maintenance testing.
 
@@ -214,4 +250,125 @@ def margin_portfolio() -> dict:
             },
         ],
         "recent_trades": [],
+    }
+
+
+@pytest.fixture()
+def gfv_portfolio() -> dict:
+    """Return a portfolio for GFV testing.
+
+    Cash account, 2 GFV in 12 months, some unsettled cash, active positions.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 15000,
+        "cash": 8000,
+        "gfv_count_12m": 2,
+        "unsettled_cash": 3000,
+        "pending_buy_with_unsettled": False,
+        "positions": [
+            {
+                "symbol": "AAPL",
+                "quantity": 20,
+                "avg_cost": 180.00,
+                "current_price": 185.00,
+                "unrealized_pnl": 100.00,
+            },
+        ],
+        "recent_trades": [],
+        "day_trades_count_5d": 0,
+    }
+
+
+@pytest.fixture()
+def short_selling_portfolio() -> dict:
+    """Return a portfolio for short selling testing.
+
+    Margin account with short positions, locates, and margin data.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 20000,
+        "short_positions": [
+            {
+                "symbol": "GME",
+                "quantity": 100,
+                "locate_obtained": True,
+                "is_hard_to_borrow": True,
+                "borrow_rate_annualized": 75,
+                "days_short": 5,
+                "is_threshold_security": False,
+            },
+            {
+                "symbol": "AMC",
+                "quantity": 200,
+                "locate_obtained": True,
+                "is_hard_to_borrow": False,
+                "borrow_rate_annualized": 5,
+                "days_short": 3,
+                "is_threshold_security": False,
+            },
+        ],
+        "short_margin_equity": 45000,
+        "short_market_value": 100000,
+        "threshold_securities": ["BBBY"],
+        "positions": [],
+        "recent_trades": [],
+        "day_trades_count_5d": 0,
+    }
+
+
+@pytest.fixture()
+def zero_dte_portfolio() -> dict:
+    """Return a portfolio for 0DTE options testing.
+
+    Margin account with 0DTE positions, options approval level 3.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 30000,
+        "options_approval_level": 3,
+        "zero_dte_positions": [
+            {
+                "symbol": "SPX_P5200",
+                "direction": "short",
+                "max_loss": 2000,
+                "exercise_cost": 52000,
+                "contracts": 1,
+            },
+            {
+                "symbol": "SPX_C5250",
+                "direction": "long",
+                "max_loss": 1500,
+                "exercise_cost": 0,
+                "contracts": 2,
+            },
+        ],
+        "zero_dte_max_portfolio_pct": 0.05,
+        "positions": [],
+        "recent_trades": [],
+        "day_trades_count_5d": 0,
+    }
+
+
+@pytest.fixture()
+def recurring_portfolio() -> dict:
+    """Return a portfolio for recurring investments testing.
+
+    Cash account with recurring investment schedule.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 50000,
+        "cash": 5000,
+        "recurring_investments": [
+            {"symbol": "VOO", "amount_usd": 500, "frequency": "monthly"},
+            {"symbol": "VTI", "amount_usd": 100, "frequency": "weekly"},
+        ],
+        "recurring_total_monthly_usd": 933,
+        "positions": [],
+        "recent_trades": [],
+        "day_trades_count_5d": 0,
     }

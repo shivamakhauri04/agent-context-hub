@@ -1,0 +1,20 @@
+{
+  "account_type": "cash",
+  "equity": 30000,
+  "cash": 2000,
+  "recurring_investments": [
+    {"symbol": "SPY", "amount_usd": 100, "frequency": "weekly"},
+    {"symbol": "VTI", "amount_usd": 200, "frequency": "monthly"},
+    {"symbol": "TSLA", "amount_usd": 50, "frequency": "weekly"}
+  ],
+  "positions": [
+    {"symbol": "SPY", "quantity": 15, "avg_cost": 510.00, "current_price": 520.00, "unrealized_pnl": 150.0},
+    {"symbol": "VTI", "quantity": 20, "avg_cost": 245.00, "current_price": 250.00, "unrealized_pnl": 100.0},
+    {"symbol": "TSLA", "quantity": 5, "avg_cost": 180.00, "current_price": 170.00, "unrealized_pnl": -50.0}
+  ],
+  "recent_trades": [
+    {"symbol": "TSLA", "action": "sell", "quantity": 10, "price": 165.00, "date": "2026-03-10", "pnl": -1500.0},
+    {"symbol": "SPY", "action": "buy", "quantity": 2, "price": 518.00, "date": "2026-03-14", "pnl": 0}
+  ],
+  "day_trades_count_5d": 0
+}

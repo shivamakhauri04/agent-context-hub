@@ -1,0 +1,17 @@
+{
+  "account_type": "cash",
+  "equity": 15000,
+  "cash": 8000,
+  "unsettled_cash": 5000,
+  "gfv_count_12m": 2,
+  "pending_buy_with_unsettled": true,
+  "positions": [
+    {"symbol": "AAPL", "quantity": 20, "avg_cost": 185.00, "current_price": 190.50, "unrealized_pnl": 110.0},
+    {"symbol": "MSFT", "quantity": 10, "avg_cost": 410.00, "current_price": 415.00, "unrealized_pnl": 50.0}
+  ],
+  "recent_trades": [
+    {"symbol": "TSLA", "action": "sell", "quantity": 15, "price": 175.00, "date": "2026-03-16", "pnl": 250.0},
+    {"symbol": "GOOGL", "action": "buy", "quantity": 5, "price": 165.00, "date": "2026-03-16", "pnl": 0}
+  ],
+  "day_trades_count_5d": 0
+}

@@ -7,7 +7,7 @@
   "properties": {
     "account_type": {
       "type": "string",
-      "enum": ["cash", "margin"],
+      "enum": ["cash", "margin", "futures"],
       "description": "Type of brokerage account."
     },
     "equity": {
@@ -83,8 +83,212 @@
     },
     "asset_class": {
       "type": "string",
-      "enum": ["equity", "crypto", "futures", "options"],
+      "enum": ["equity", "crypto", "futures", "options", "event_contract"],
       "description": "Primary asset class for the account or trade."
+    },
+    "futures_positions": {
+      "type": "array",
+      "description": "Current futures contract positions.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "contracts"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "contracts": {"type": "integer"},
+          "avg_entry_price": {"type": "number"},
+          "current_price": {"type": "number"},
+          "unrealized_pnl": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "futures_account_balance": {
+      "type": "number",
+      "description": "Cash balance in the futures account for margin requirements."
+    },
+    "futures_day_trade": {
+      "type": "boolean",
+      "description": "Whether current futures positions are day trades (50% initial margin)."
+    },
+    "settlement_days": {
+      "type": "integer",
+      "description": "Settlement cycle in business days (1 for US equities since May 2024)."
+    },
+    "gfv_count_12m": {
+      "type": "integer",
+      "description": "Good Faith Violations in the last 12 months (cash accounts)."
+    },
+    "unsettled_cash": {
+      "type": "number",
+      "description": "Cash from recent sales that has not yet settled."
+    },
+    "pending_buy_with_unsettled": {
+      "type": "boolean",
+      "description": "Whether a pending buy order uses unsettled funds."
+    },
+    "short_positions": {
+      "type": "array",
+      "description": "Current short positions.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "quantity"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "quantity": {"type": "number"},
+          "locate_obtained": {"type": "boolean"},
+          "is_hard_to_borrow": {"type": "boolean"},
+          "borrow_rate_annualized": {"type": "number"},
+          "days_short": {"type": "integer"},
+          "is_threshold_security": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "short_margin_equity": {
+      "type": "number",
+      "description": "Equity allocated to short positions."
+    },
+    "short_market_value": {
+      "type": "number",
+      "description": "Total market value of short positions."
+    },
+    "threshold_securities": {
+      "type": "array",
+      "description": "Symbols on the Reg SHO threshold securities list.",
+      "items": {"type": "string"}
+    },
+    "target_allocations": {
+      "type": "array",
+      "description": "Target portfolio allocation percentages.",
+      "items": {
+        "type": "object",
+        "required": ["asset_class", "target_pct"],
+        "properties": {
+          "asset_class": {"type": "string"},
+          "target_pct": {"type": "number"},
+          "current_pct": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "rebalance_threshold_pct": {
+      "type": "number",
+      "description": "Maximum allowed drift percentage before rebalancing triggers."
+    },
+    "rebalance_min_trade_usd": {
+      "type": "number",
+      "description": "Minimum trade size in USD for rebalancing (avoids micro-trades)."
+    },
+    "zero_dte_positions": {
+      "type": "array",
+      "description": "Current 0DTE (same-day expiration) options positions.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "direction"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "direction": {"type": "string", "enum": ["long", "short"]},
+          "max_loss": {"type": "number"},
+          "exercise_cost": {"type": "number"},
+          "contracts": {"type": "integer"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "zero_dte_max_portfolio_pct": {
+      "type": "number",
+      "description": "Maximum portfolio percentage allowed for 0DTE positions."
+    },
+    "recurring_investments": {
+      "type": "array",
+      "description": "Configured recurring investment schedules.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "amount_usd", "frequency"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "amount_usd": {"type": "number"},
+          "frequency": {
+            "type": "string",
+            "enum": ["daily", "weekly", "biweekly", "monthly"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "recurring_total_monthly_usd": {
+      "type": "number",
+      "description": "Total estimated monthly recurring investment amount."
+    },
+    "options_approval_level": {
+      "type": "integer",
+      "description": "Options trading approval level (0-5)."
+    },
+    "pending_options_strategies": {
+      "type": "array",
+      "description": "Pending options strategies awaiting execution.",
+      "items": {
+        "type": "object",
+        "required": ["strategy", "symbol"],
+        "properties": {
+          "strategy": {"type": "string"},
+          "symbol": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "expiring_options": {
+      "type": "array",
+      "description": "Options nearing expiration.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "exercise_cost"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "exercise_cost": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "market_value": {
+      "type": "number",
+      "description": "Total market value of all positions."
+    },
+    "house_margin_requirement": {
+      "type": "number",
+      "description": "Broker house margin maintenance requirement (e.g. 0.30 for 30%)."
+    },
+    "spouse_trades": {
+      "type": "array",
+      "description": "Recent trades in spouse accounts (for wash sale cross-account check).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "symbol": {"type": "string"},
+          "action": {"type": "string"},
+          "quantity": {"type": "number"},
+          "price": {"type": "number"},
+          "date": {"type": "string", "format": "date"},
+          "pnl": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "other_accounts": {
+      "type": "array",
+      "description": "Recent trades in other owned accounts (for wash sale cross-account check).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "symbol": {"type": "string"},
+          "action": {"type": "string"},
+          "quantity": {"type": "number"},
+          "price": {"type": "number"},
+          "date": {"type": "string", "format": "date"},
+          "pnl": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false
