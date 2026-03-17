@@ -54,6 +54,37 @@
     "day_trades_count_5d": {
       "type": "integer",
       "description": "Number of day trades in the last 5 trading days."
+    },
+    "ira_type": {
+      "type": "string",
+      "enum": ["traditional", "roth"],
+      "description": "IRA account type, if applicable."
+    },
+    "ira_contribution_ytd": {
+      "type": "number",
+      "description": "Year-to-date IRA contributions across all IRAs."
+    },
+    "account_holder_age": {
+      "type": "number",
+      "description": "Account holder age (for IRA contribution/withdrawal rules)."
+    },
+    "magi": {
+      "type": "number",
+      "description": "Modified Adjusted Gross Income (for Roth IRA eligibility)."
+    },
+    "filing_status": {
+      "type": "string",
+      "enum": ["single", "married_filing_jointly", "married_filing_separately"],
+      "description": "Tax filing status (for Roth MAGI phase-out thresholds)."
+    },
+    "withdrawal_amount": {
+      "type": "number",
+      "description": "Pending withdrawal amount (for early withdrawal penalty check)."
+    },
+    "asset_class": {
+      "type": "string",
+      "enum": ["equity", "crypto", "futures", "options"],
+      "description": "Primary asset class for the account or trade."
     }
   },
   "additionalProperties": false

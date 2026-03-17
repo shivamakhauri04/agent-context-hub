@@ -25,7 +25,7 @@ _SYNONYM_MAP: dict[str, list[str]] = {
     "broker": ["alpaca", "interactive_brokers", "api", "order"],
     "vwap": ["volume_weighted", "indicator", "technical"],
     "indicator": ["vwap", "rsi", "macd", "technical"],
-    "fractional": ["yfinance", "shares", "partial"],
+    "fractional": ["yfinance", "shares", "partial", "odd_lot", "nbbo"],
     "settlement": ["wash_sale", "t2", "clearing"],
     "t2": ["settlement", "clearing", "wash_sale"],
     "premarket": ["trading_hours", "extended_hours"],
@@ -33,6 +33,39 @@ _SYNONYM_MAP: dict[str, list[str]] = {
     "drip": ["dividend", "reinvestment", "corporate_action"],
     "dividend": ["drip", "corporate_action", "distribution"],
     "stop": ["order", "stop_loss", "alpaca"],
+    "options": ["option", "call", "put", "assignment", "expiration", "greeks", "approval"],
+    "option": ["options", "call", "put", "assignment", "expiration", "greeks"],
+    "call": ["option", "options", "covered_call", "naked_call"],
+    "put": ["option", "options", "protective_put", "naked_put"],
+    "assignment": ["option", "options", "exercise", "expiration"],
+    "expiration": ["option", "options", "assignment", "exercise", "theta"],
+    "greeks": ["delta", "gamma", "theta", "vega", "option"],
+    "maintenance": ["margin", "margin_call", "finra_4210", "equity"],
+    "margin_call": ["margin", "maintenance", "liquidation", "equity"],
+    "liquidation": ["margin", "margin_call", "forced", "maintenance"],
+    "reg_t": ["margin", "initial_margin", "50_percent"],
+    "suitability": ["reg_bi", "finra_2111", "risk_tolerance", "kyc"],
+    "reg_bi": ["suitability", "best_interest", "recommendation"],
+    "kyc": ["suitability", "customer_profile", "risk_tolerance"],
+    "risk_tolerance": ["suitability", "conservative", "aggressive", "speculative"],
+    "execution": ["best_execution", "order", "fill", "slippage", "pfof"],
+    "slippage": ["execution", "market_order", "volatility", "fill"],
+    # IRA / Retirement
+    "ira": ["roth", "traditional_ira", "retirement", "contribution", "rmd"],
+    "roth": ["ira", "roth_ira", "contribution", "income_limit"],
+    "retirement": ["ira", "roth", "rmd", "contribution"],
+    "contribution": ["ira", "roth", "limit", "over_contribution"],
+    "withdrawal": ["ira", "penalty", "early_withdrawal", "rmd"],
+    "rmd": ["required_minimum_distribution", "ira", "traditional_ira"],
+    # Crypto
+    "crypto": ["bitcoin", "ethereum", "digital_asset", "btc", "eth", "staking"],
+    "bitcoin": ["crypto", "btc", "digital_asset"],
+    "staking": ["crypto", "reward", "yield", "ethereum"],
+    # Fractional / Odd lot
+    "odd_lot": ["fractional", "nbbo", "execution"],
+    # AI compliance
+    "chatbot": ["ai", "communications", "rule_2210"],
+    "ai_compliance": ["finra_24_09", "communications", "rule_2210", "supervision"],
 }
 
 _SYNONYM_WEIGHT = 0.5

@@ -145,3 +145,73 @@ def sample_portfolio() -> dict:
         ],
         "day_trades_count_5d": 3,
     }
+
+
+@pytest.fixture()
+def options_portfolio() -> dict:
+    """Return a portfolio for options approval testing.
+
+    Margin account, level 2 approval, pending strategies, expiring options.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 50000,
+        "cash": 10000,
+        "options_approval_level": 2,
+        "pending_options_strategies": [
+            {"strategy": "long_call", "symbol": "AAPL"},
+            {"strategy": "naked_call", "symbol": "TSLA"},
+        ],
+        "expiring_options": [
+            {"symbol": "AAPL_C200", "exercise_cost": 20000},
+            {"symbol": "MSFT_C400", "exercise_cost": 5000},
+        ],
+        "positions": [],
+        "recent_trades": [],
+    }
+
+
+@pytest.fixture()
+def ira_portfolio() -> dict:
+    """Return a portfolio for IRA compliance testing.
+
+    Roth IRA, age 35, $5k contributed, $120k MAGI, single filer.
+    """
+    return {
+        "ira_type": "roth",
+        "ira_contribution_ytd": 5000,
+        "account_holder_age": 35,
+        "magi": 120000,
+        "filing_status": "single",
+        "withdrawal_amount": 0,
+    }
+
+
+@pytest.fixture()
+def margin_portfolio() -> dict:
+    """Return a portfolio for margin maintenance testing.
+
+    Margin account with equity/market_value set for ratio testing.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 30000,
+        "market_value": 100000,
+        "cash": 5000,
+        "house_margin_requirement": 0.30,
+        "positions": [
+            {
+                "symbol": "AAPL",
+                "quantity": 200,
+                "avg_cost": 178.50,
+                "current_price": 185.00,
+            },
+            {
+                "symbol": "MSFT",
+                "quantity": 100,
+                "avg_cost": 415.00,
+                "current_price": 420.00,
+            },
+        ],
+        "recent_trades": [],
+    }

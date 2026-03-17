@@ -9,6 +9,10 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
+from achub.commands.checkers.ira import check_ira_compliance
+from achub.commands.checkers.margin import check_margin_maintenance
+from achub.commands.checkers.options import check_options_approval
+
 console = Console()
 
 
@@ -152,6 +156,9 @@ def _check_wash_sale(portfolio: dict) -> list[str]:
 _RULE_CHECKERS = {
     "pdt": _check_pdt,
     "wash-sale": _check_wash_sale,
+    "options": check_options_approval,
+    "margin": check_margin_maintenance,
+    "ira": check_ira_compliance,
 }
 
 

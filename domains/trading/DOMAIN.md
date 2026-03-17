@@ -10,6 +10,7 @@ categories:
   - broker-apis
   - technical-indicators
   - market-structure
+  - order-execution
 maintainers: ["shivamakhauri"]
 ---
 
@@ -46,6 +47,10 @@ Reference data for trading hours, exchange rules, tick sizes, and session bounda
 3. **When price data looks anomalous** (large gaps, sudden drops), consult corporate-actions before assuming a crash.
 4. **When computing indicators**, verify your calculation approach against the technical-indicators docs.
 5. **When scheduling trades**, reference market-structure for hours, holidays, and session types.
+6. **When managing IRA accounts**, check contribution limits, Roth income eligibility, and early withdrawal penalties before any transaction.
+7. **When trading crypto**, do not apply equity rules (PDT, SIPC, NBBO) — crypto has its own regulatory framework.
+8. **When placing fractional/odd-lot orders**, acknowledge NBBO is not guaranteed and check transfer restrictions.
+9. **When generating customer-facing AI content**, ensure compliance with FINRA Rule 2210 — include risk disclaimers, avoid return predictions.
 
 ## Severity Levels
 
