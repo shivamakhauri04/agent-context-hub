@@ -78,6 +78,10 @@ def achub_get(content_id: str) -> str:
 # ---------------------------------------------------------------------------
 #
 # from crewai import Agent, Task, Crew
+# from achub.prompts import get_system_prompt
+#
+# # Generate mandatory-check instructions for the trading domain
+# system_prompt = get_system_prompt("trading", _get_registry())
 #
 # trading_analyst = Agent(
 #     role="Trading Rule Analyst",
@@ -85,7 +89,8 @@ def achub_get(content_id: str) -> str:
 #     backstory=(
 #         "You are an expert in trading regulations like PDT rules, "
 #         "wash sale rules, and market structure. You use the achub "
-#         "knowledge base to look up precise rules before giving advice."
+#         "knowledge base to look up precise rules before giving advice.\n\n"
+#         f"{system_prompt}"
 #     ),
 #     tools=[achub_search, achub_get],
 #     verbose=True,

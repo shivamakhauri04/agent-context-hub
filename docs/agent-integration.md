@@ -180,6 +180,15 @@ agent.run("Should I sell AAPL and buy it back in 2 weeks for tax purposes?")
 from crewai.tools import BaseTool
 from achub.core.registry import ContentRegistry
 
+_registry: ContentRegistry | None = None
+
+def _get_registry() -> ContentRegistry:
+    global _registry
+    if _registry is None:
+        _registry = ContentRegistry("/path/to/agent-context-hub")
+        _registry.build()  # Call build() once and reuse
+    return _registry
+
 class DomainContextTool(BaseTool):
     name: str = "domain_context_lookup"
     description: str = (
@@ -188,8 +197,7 @@ class DomainContextTool(BaseTool):
     )
 
     def _run(self, query: str) -> str:
-        registry = ContentRegistry("/path/to/agent-context-hub")
-        registry.build()
+        registry = _get_registry()
         results = registry.search(query)
         if not results:
             return "No relevant context found."

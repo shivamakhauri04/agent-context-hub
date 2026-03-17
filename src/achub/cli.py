@@ -10,30 +10,28 @@ from achub.commands.check import check
 from achub.commands.feedback import feedback
 from achub.commands.get import get
 from achub.commands.list import list_content
+from achub.commands.prompt import prompt
 from achub.commands.regime import regime
 from achub.commands.search import search
 from achub.commands.validate import validate
+from achub.utils.paths import find_project_root
 
 
 @click.group()
 @click.version_option(version=__version__, prog_name="achub")
+@click.option("--verbose", "-v", is_flag=True, default=False, help="Enable debug logging.")
 @click.pass_context
-def main(ctx):
+def main(ctx, verbose: bool):
     """achub — The missing knowledge layer for AI agents."""
     ctx.ensure_object(dict)
-    # Store project root in context for commands to use
-    ctx.obj["project_root"] = _find_project_root()
+    ctx.obj["project_root"] = find_project_root()
+    if verbose:
+        import logging
 
-
-def _find_project_root():
-    from pathlib import Path
-
-    path = Path(__file__).resolve().parent
-    while path != path.parent:
-        if (path / "pyproject.toml").exists():
-            return path
-        path = path.parent
-    return Path.cwd()
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(name)s %(levelname)s: %(message)s",
+        )
 
 
 # Register all commands
@@ -45,6 +43,7 @@ main.add_command(check)
 main.add_command(regime)
 main.add_command(annotate)
 main.add_command(feedback)
+main.add_command(prompt)
 main.add_command(benchmark)
 
 # MCP command — lazy import, graceful if mcp not installed

@@ -89,7 +89,13 @@ class AchubGetTool(BaseTool):
             return f"Content not found: {content_id}"
         title = content.get("metadata", {}).get("title", "Untitled")
         body = content.get("body", "")
-        return f"# {title}\n\n{body}"
+        prefix = ""
+        if content.get("stale"):
+            prefix = (
+                f"WARNING: This content is stale ({content.get('stale_days', '?')} "
+                "days since last verification). Verify against primary sources.\n\n"
+            )
+        return f"{prefix}# {title}\n\n{body}"
 
 
 # ---------------------------------------------------------------------------
@@ -98,6 +104,11 @@ class AchubGetTool(BaseTool):
 #
 # from langchain_openai import ChatOpenAI
 # from langchain.agents import initialize_agent, AgentType
+# from achub.prompts import get_system_prompt
+#
+# # Inject achub system prompt for mandatory checks
+# registry = AchubSearchTool()._get_registry()
+# system_prompt = get_system_prompt("trading", registry)
 #
 # llm = ChatOpenAI(model="gpt-4o", temperature=0)
 # tools = [AchubSearchTool(), AchubGetTool()]
@@ -107,6 +118,7 @@ class AchubGetTool(BaseTool):
 #     llm,
 #     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
 #     verbose=True,
+#     agent_kwargs={"system_message": system_prompt},
 # )
 #
 # response = agent.run(

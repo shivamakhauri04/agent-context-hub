@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from achub.core.parser import parse_content
+from achub.utils.paths import find_domains_dir
 
 DEFAULT_DOMAINS_DIR = "domains"
 
@@ -16,7 +17,7 @@ def discover_domains(base_path: Path) -> list[str]:
     Returns:
         Sorted list of domain names.
     """
-    domains_dir = Path(base_path) / DEFAULT_DOMAINS_DIR
+    domains_dir = find_domains_dir(base_path)
     if not domains_dir.is_dir():
         return []
     domains: list[str] = []
@@ -36,7 +37,7 @@ def get_domain_path(base_path: Path, domain: str) -> Path:
     Returns:
         Path to the domain directory.
     """
-    return Path(base_path) / DEFAULT_DOMAINS_DIR / domain
+    return find_domains_dir(base_path) / domain
 
 
 def get_domain_info(base_path: Path, domain: str) -> dict | None:

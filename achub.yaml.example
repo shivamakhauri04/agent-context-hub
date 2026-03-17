@@ -1,0 +1,10 @@
+# achub.yaml — Optional configuration for agent-context-hub
+# Place this file at your project root as achub.yaml or achub.yml
+
+# Extra content directories (enterprise/proprietary domains)
+# These are scanned alongside the built-in domains/ directory.
+extra_content:
+  - /path/to/internal-docs
+
+# Days before content is flagged stale (default: 90)
+staleness_threshold_days: 60

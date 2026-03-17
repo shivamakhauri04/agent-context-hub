@@ -6,26 +6,17 @@ from pathlib import Path
 import jsonschema
 
 from achub.core.parser import parse_content
+from achub.utils.paths import find_project_root, find_schemas_dir
 
-_DEFAULT_SCHEMA_NAME = "schemas/content-frontmatter.json"
-
-
-def _find_project_root(start: Path | None = None) -> Path | None:
-    """Walk up from start looking for a directory containing pyproject.toml."""
-    current = Path(start) if start else Path(__file__).resolve().parent
-    for parent in [current, *current.parents]:
-        if (parent / "pyproject.toml").exists():
-            return parent
-    return None
+_DEFAULT_SCHEMA_NAME = "content-frontmatter.json"
 
 
 def _load_schema(schema_path: Path | None = None) -> dict | None:
     """Load a JSON schema file."""
     if schema_path is None:
-        root = _find_project_root()
-        if root is None:
-            return None
-        schema_path = root / _DEFAULT_SCHEMA_NAME
+        root = find_project_root()
+        schemas_dir = find_schemas_dir(root)
+        schema_path = schemas_dir / _DEFAULT_SCHEMA_NAME
     schema_path = Path(schema_path)
     if not schema_path.exists():
         return None

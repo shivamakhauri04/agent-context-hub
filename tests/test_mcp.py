@@ -1,12 +1,10 @@
 """Tests for MCP server tool handler functions."""
 from __future__ import annotations
 
-import json
-from unittest.mock import patch
-
 import pytest
 
-from achub.integrations.mcp import _build_registry, _find_project_root
+from achub.integrations.mcp import _build_registry
+from achub.utils.paths import find_project_root
 
 
 @pytest.fixture
@@ -15,7 +13,7 @@ def registry():
 
 
 def test_find_project_root():
-    root = _find_project_root()
+    root = find_project_root()
     assert (root / "pyproject.toml").exists()
 
 

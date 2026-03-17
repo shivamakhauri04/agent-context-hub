@@ -167,17 +167,13 @@ _RULE_CHECKERS = {
     type=click.Path(exists=True),
     help="Path to portfolio JSON file.",
 )
-@click.option(
-    "--structured",
-    is_flag=True,
-    default=False,
-    help="Also evaluate structured checks from content docs.",
-)
 @click.pass_context
-def check(ctx, domain: str, rules: str, portfolio: str, structured: bool):
+def check(ctx, domain: str, rules: str, portfolio: str):
     """Run rule checks against a portfolio.
 
     Checks trading rules like PDT and wash-sale against your portfolio state.
+    Automatically runs both Python checkers and structured YAML checks from
+    content documents.
 
     Example: achub check --domain trading --rules pdt,wash-sale --portfolio portfolio.json
     """
@@ -196,25 +192,25 @@ def check(ctx, domain: str, rules: str, portfolio: str, structured: bool):
         violations = checker(portfolio_data)
         all_violations.extend(violations)
 
-    if structured:
-        from achub.core.checker import StructuredCheckEvaluator
-        from achub.core.registry import ContentRegistry
+    # Always run structured checks from content documents
+    from achub.core.checker import StructuredCheckEvaluator
+    from achub.core.registry import ContentRegistry
 
-        project_root = ctx.obj["project_root"]
-        registry = ContentRegistry(project_root)
-        registry.build()
-        evaluator = StructuredCheckEvaluator()
-        items = registry.list_all(domain=domain)
-        for item in items:
-            checks = item.get("checks", [])
-            if not checks:
-                continue
-            results = evaluator.evaluate_checks(checks, portfolio_data)
-            for r in results:
-                if not r.passed:
-                    all_violations.append(
-                        f"[{r.severity.upper()}] {r.id}: {r.message}"
-                    )
+    project_root = ctx.obj["project_root"]
+    registry = ContentRegistry(project_root)
+    registry.build()
+    evaluator = StructuredCheckEvaluator()
+    items = registry.list_all(domain=domain)
+    for item in items:
+        checks = item.get("checks", [])
+        if not checks:
+            continue
+        results = evaluator.evaluate_checks(checks, portfolio_data)
+        for r in results:
+            if not r.passed:
+                all_violations.append(
+                    f"[{r.severity.upper()}] {r.id}: {r.message}"
+                )
 
     if all_violations:
         panel_lines = "\n".join(f"[red]- {v}[/red]" for v in all_violations)

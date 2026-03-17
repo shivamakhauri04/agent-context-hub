@@ -5,6 +5,7 @@ import json
 
 import click
 
+from achub.core.constants import SKIP_SECTIONS
 from achub.core.registry import ContentRegistry
 from achub.utils.formatting import print_content
 
@@ -50,34 +51,28 @@ def get(ctx, content_id: str, output_format: str):
 
 
 def _print_llm_format(content: dict) -> None:
-    """Print token-efficient output: title, rules/checklist sections only."""
+    """Print token-efficient output: all sections except non-actionable ones."""
     metadata = content.get("metadata", {})
     title = metadata.get("title", content.get("content_id", "Untitled"))
     click.echo(f"# {title}")
+    click.echo(f"Severity: {metadata.get('severity', 'unknown')}")
+
+    if content.get("stale"):
+        stale_days = content.get("stale_days", "?")
+        click.echo(
+            f"WARNING: STALE ({stale_days} days since last verification)"
+            " -- verify against primary sources"
+        )
 
     body = content.get("body", "")
-    # Extract only rules, checklist, and key sections — skip verbose prose
-    in_relevant_section = False
+    in_section = True
     for line in body.splitlines():
-        stripped = line.strip().lower()
-        # Detect section headers that contain useful info
         if line.startswith("#"):
-            is_relevant = any(
-                kw in stripped
-                for kw in [
-                    "rule", "checklist", "requirement",
-                    "key point", "warning", "constraint", "limit",
-                ]
-            )
-            if is_relevant:
-                in_relevant_section = True
-                click.echo(line)
+            heading_text = line.lstrip("#").strip().lower()
+            if heading_text in SKIP_SECTIONS:
+                in_section = False
             else:
-                in_relevant_section = False
-        elif in_relevant_section:
-            # Print non-empty lines in relevant sections
-            if line.strip():
+                in_section = True
                 click.echo(line)
-        elif line.strip().startswith("- ") or line.strip().startswith("* "):
-            # Always include bullet points as they tend to be actionable
+        elif in_section and line.strip():
             click.echo(line)

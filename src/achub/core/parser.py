@@ -69,7 +69,7 @@ def _extract_structured_checks(body: str) -> list[dict] | None:
         if isinstance(data, dict) and "checks" in data:
             return data["checks"]
     except Exception:
-        pass
+        logger.warning("Failed to parse structured checks YAML block", exc_info=True)
     return None
 
 

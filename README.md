@@ -216,23 +216,41 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
-Available MCP tools: `achub_search`, `achub_get`, `achub_check`, `achub_list`.
+Available MCP tools: `achub_search`, `achub_search_and_get`, `achub_get`, `achub_check`, `achub_list`, `achub_prompt`.
 
 See [docs/agent-integration.md](docs/agent-integration.md) for complete integration patterns, best practices, and advanced usage.
+
+## Configuration
+
+Create an `achub.yaml` (or `achub.yml`) in your project root for optional configuration:
+
+```yaml
+# Extra content directories (enterprise/proprietary domains)
+extra_content:
+  - /path/to/internal-docs
+
+# Days before content is flagged stale (default: 90)
+staleness_threshold_days: 60
+```
+
+See [achub.yaml.example](achub.yaml.example) for a full example.
 
 ## CLI Reference
 
 | Command | Description | Key Options |
 |---|---|---|
 | `achub list` | List all content documents | `--domain`, `--category` |
-| `achub search <query>` | Full-text TF-IDF search | `--domain`, `--limit` |
+| `achub search <query>` | Full-text TF-IDF search | `--domain`, `--limit`, `--format json` |
 | `achub get <content_id>` | Retrieve a document by ID | `--format markdown\|json\|llm` |
+| `achub prompt` | Get mandatory check instructions for a domain | `--domain` |
 | `achub validate [path]` | Validate frontmatter against schema | `--all` for all files |
 | `achub check <portfolio>` | Run compliance checks (PDT, wash sale) | Portfolio as JSON input |
 | `achub regime` | Current market regime and session info | Trading day status, hours |
 | `achub annotate <content_id>` | Add notes to a content document | Stored in `.achub/annotations/` |
 | `achub feedback <content_id>` | Rate and comment on content | Stored in `.achub/feedback/` |
 | `achub benchmark run` | Run benchmark scenarios | `--domain` |
+
+Use `achub --verbose` (or `-v`) with any command to enable debug logging.
 
 ### Examples
 
@@ -290,7 +308,7 @@ src/achub/commands/              CLI Layer
        |
        v
 src/achub/integrations/          Integration Layer
-  mcp.py                         MCP server (planned)
+  mcp.py                         MCP server (6 tools: search, get, check, list, prompt, search_and_get)
                                  LangChain / CrewAI via Python API
        |
        v

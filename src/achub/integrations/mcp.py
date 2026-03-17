@@ -6,28 +6,83 @@ Requires: pip install agent-context-hub[mcp]
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 
 from achub.commands.check import _RULE_CHECKERS
+from achub.core.constants import SKIP_SECTIONS
 from achub.core.registry import ContentRegistry
+from achub.prompts import get_system_prompt
+from achub.utils.paths import find_project_root
 
+logger = logging.getLogger(__name__)
 
-def _find_project_root() -> Path:
-    """Walk up from this file to find the repo root (contains pyproject.toml)."""
-    path = Path(__file__).resolve().parent
-    while path != path.parent:
-        if (path / "pyproject.toml").exists():
-            return path
-        path = path.parent
-    return Path.cwd()
+# Sections to skip in LLM-optimized output (shared constant).
+_SKIP_SECTIONS = SKIP_SECTIONS
+
+_SNIPPET_LENGTH = 500
 
 
 def _build_registry() -> ContentRegistry:
     """Build and return a ContentRegistry instance."""
-    root = _find_project_root()
-    registry = ContentRegistry(root)
+    root = find_project_root()
+    config = _load_achub_config(root)
+    extra_dirs = [Path(p) for p in config.get("extra_content", [])]
+    staleness = config.get("staleness_threshold_days", 90)
+    registry = ContentRegistry(
+        root, extra_content_dirs=extra_dirs, staleness_threshold_days=staleness
+    )
     registry.build()
     return registry
+
+
+def _load_achub_config(root: Path) -> dict:
+    """Load achub.yaml config from project root if it exists."""
+    config_path = root / "achub.yaml"
+    if not config_path.exists():
+        config_path = root / "achub.yml"
+    if not config_path.exists():
+        return {}
+    try:
+        import yaml
+
+        with open(config_path) as f:
+            return yaml.safe_load(f) or {}
+    except Exception:
+        logger.warning("Failed to parse %s, returning empty config", config_path, exc_info=True)
+        return {}
+
+
+def _format_llm(content: dict) -> str:
+    """Format content for LLM consumption: skip non-actionable sections."""
+    metadata = content.get("metadata", {})
+    body = content.get("body", "")
+
+    lines = [f"# {metadata.get('title', content.get('content_id', 'Untitled'))}"]
+    lines.append(f"Severity: {metadata.get('severity', 'unknown')}")
+
+    # Staleness warning
+    if content.get("stale"):
+        stale_days = content.get("stale_days", "?")
+        lines.append(
+            f"WARNING: STALE ({stale_days} days since last verification)"
+            " — verify against primary sources"
+        )
+
+    lines.append("")
+    in_section = True  # Start including content before first header
+    for line in body.splitlines():
+        if line.startswith("#"):
+            heading_text = line.lstrip("#").strip().lower()
+            if heading_text in _SKIP_SECTIONS:
+                in_section = False
+            else:
+                in_section = True
+                lines.append(line)
+        elif in_section and line.strip():
+            lines.append(line)
+
+    return "\n".join(lines)
 
 
 def create_server():
@@ -38,7 +93,8 @@ def create_server():
         "agent-context-hub",
         instructions=(
             "Agent-readable knowledge layer for AI agents. "
-            "Search, retrieve, and check domain-specific content "
+            "Call achub_prompt first to get mandatory check instructions "
+            "for your domain. Then use search, retrieve, and check tools "
             "to prevent hallucinations in trading and other high-stakes domains."
         ),
     )
@@ -46,27 +102,74 @@ def create_server():
     registry = _build_registry()
 
     @server.tool()
-    def achub_search(query: str, domain: str | None = None) -> str:
+    def achub_search(
+        query: str,
+        domain: str | None = None,
+        include_body: bool = False,
+    ) -> str:
         """Search the agent-context-hub knowledge base for domain-specific rules,
         regulations, and gotchas. Returns ranked results by relevance.
 
         Args:
             query: Natural language search query.
             domain: Optional domain filter (e.g. "trading").
+            include_body: If True, include a snippet of each result's body.
         """
         results = registry.search(query, domain=domain)
         if not results:
             return json.dumps({"results": [], "message": "No results found."})
         output = []
         for item in results[:10]:
-            output.append({
+            entry: dict = {
                 "id": item.get("content_id", ""),
                 "title": item.get("metadata", {}).get("title", ""),
                 "score": round(item.get("score", 0.0), 4),
                 "severity": item.get("metadata", {}).get("severity", ""),
                 "domain": item.get("domain", ""),
-            })
+            }
+            if item.get("stale"):
+                entry["stale"] = True
+                entry["stale_days"] = item.get("stale_days")
+            if include_body:
+                body = item.get("body", "")
+                entry["snippet"] = body[:_SNIPPET_LENGTH]
+            output.append(entry)
         return json.dumps({"results": output})
+
+    @server.tool()
+    def achub_search_and_get(
+        query: str,
+        domain: str | None = None,
+        min_score: float = 0.01,
+    ) -> str:
+        """Search and return the top result with full LLM-formatted body.
+
+        Single call that combines search + get for the best match.
+        Use this when you need the actual content, not just IDs.
+        Returns a JSON envelope with content_id, score, severity, and content.
+
+        Args:
+            query: Natural language search query.
+            domain: Optional domain filter (e.g. "trading").
+            min_score: Minimum score threshold (default 0.01).
+        """
+        results = registry.search(query, domain=domain)
+        if not results:
+            return json.dumps({"error": "No results found."})
+        top = results[0]
+        score = top.get("score", 0.0)
+        envelope: dict = {
+            "content_id": top.get("content_id", ""),
+            "score": round(score, 4),
+            "severity": top.get("metadata", {}).get("severity", ""),
+            "content": _format_llm(top),
+        }
+        if top.get("stale"):
+            envelope["stale"] = True
+            envelope["stale_days"] = top.get("stale_days")
+        if score < min_score:
+            envelope["warning"] = "Low confidence match"
+        return json.dumps(envelope)
 
     @server.tool()
     def achub_get(content_id: str, format: str = "llm") -> str:
@@ -74,8 +177,8 @@ def create_server():
 
         Args:
             content_id: Document ID (e.g. "trading/regulations/pdt-rule/rules").
-            format: Output format — "llm" (token-efficient, default), "json" (structured),
-                    or "markdown" (full body).
+            format: Output format — "llm" (token-efficient, default), "json"
+                    (structured), or "markdown" (full body).
         """
         content = registry.get(content_id)
         if content is None:
@@ -85,43 +188,33 @@ def create_server():
         body = content.get("body", "")
 
         if format == "json":
-            return json.dumps({
+            result: dict = {
                 "content_id": content.get("content_id"),
                 "metadata": metadata,
                 "body": body,
-            })
+            }
+            if content.get("stale"):
+                result["stale"] = True
+                result["stale_days"] = content.get("stale_days")
+            return json.dumps(result)
         elif format == "markdown":
-            return body
+            prefix = ""
+            if content.get("stale"):
+                stale_days = content.get("stale_days", "?")
+                prefix = (
+                    f"> WARNING: STALE ({stale_days} days) "
+                    "— verify against primary sources\n\n"
+                )
+            return prefix + body
         else:
-            # LLM format: title + actionable sections only
-            lines = [f"# {metadata.get('title', content_id)}"]
-            lines.append(f"Severity: {metadata.get('severity', 'unknown')}")
-            lines.append("")
-            in_relevant = False
-            for line in body.splitlines():
-                stripped = line.strip().lower()
-                if line.startswith("#"):
-                    is_relevant = any(
-                        kw in stripped
-                        for kw in [
-                            "rule", "checklist", "requirement",
-                            "key point", "warning", "constraint", "limit",
-                        ]
-                    )
-                    if is_relevant:
-                        in_relevant = True
-                        lines.append(line)
-                    else:
-                        in_relevant = False
-                elif in_relevant and line.strip():
-                    lines.append(line)
-                elif line.strip().startswith("- ") or line.strip().startswith("* "):
-                    lines.append(line)
-            return "\n".join(lines)
+            return _format_llm(content)
 
     @server.tool()
     def achub_check(domain: str, rules: str, portfolio_json: str) -> str:
         """Run compliance rule checks against a portfolio.
+
+        Runs both hardcoded Python checkers and structured YAML checks
+        from content documents.
 
         Args:
             domain: Domain to check (e.g. "trading").
@@ -136,7 +229,9 @@ def create_server():
         rule_names = [r.strip() for r in rules.split(",")]
         violations = []
         passed_rules = []
+        check_warnings: list[str] = []
 
+        # Python checkers
         for rule_name in rule_names:
             checker = _RULE_CHECKERS.get(rule_name)
             if checker is None:
@@ -148,14 +243,42 @@ def create_server():
             else:
                 passed_rules.append(rule_name)
 
-        return json.dumps({
+        # Structured checks from content documents
+        try:
+            from achub.core.checker import StructuredCheckEvaluator
+
+            evaluator = StructuredCheckEvaluator()
+            items = registry.list_all(domain=domain)
+            for item in items:
+                checks = item.get("checks", [])
+                if not checks:
+                    continue
+                results = evaluator.evaluate_checks(checks, portfolio)
+                for r in results:
+                    if not r.passed:
+                        violations.append(
+                            f"[{r.severity.upper()}] {r.id}: {r.message}"
+                        )
+        except Exception as exc:
+            logger.warning("Structured check evaluation failed", exc_info=True)
+            check_warnings.append(
+                f"Structured check evaluation failed: {exc}. "
+                "Only Python checker results are shown."
+            )
+
+        result_dict: dict = {
             "violations": violations,
             "passed": passed_rules,
             "has_violations": len(violations) > 0,
-        })
+        }
+        if check_warnings:
+            result_dict["warnings"] = check_warnings
+        return json.dumps(result_dict)
 
     @server.tool()
-    def achub_list(domain: str | None = None, category: str | None = None) -> str:
+    def achub_list(
+        domain: str | None = None, category: str | None = None
+    ) -> str:
         """List available content documents with optional filters.
 
         Args:
@@ -174,6 +297,19 @@ def create_server():
                 "severity": metadata.get("severity", ""),
             })
         return json.dumps({"items": output, "count": len(output)})
+
+    @server.tool()
+    def achub_prompt(domain: str) -> str:
+        """Get mandatory check instructions for a domain.
+
+        Call this FIRST when starting work in a domain. Returns a system
+        prompt snippet listing CRITICAL and HIGH severity documents that
+        the agent must consult before taking actions.
+
+        Args:
+            domain: Domain name (e.g. "trading").
+        """
+        return get_system_prompt(domain, registry)
 
     return server
 
