@@ -177,6 +177,20 @@ avwap = compute_anchored_vwap(aapl_1m_bars, anchor_date="2025-01-30")
 - [ ] Ensure timezone handling is correct (VWAP resets at 9:30 AM ET, not UTC)
 - [ ] If fetching VWAP from an API, verify whether it includes pre-market data or not
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: vwap_intraday_only
+    condition: "bar_interval != 'daily'"
+    severity: critical
+    message: "VWAP requires intraday bars — daily bars produce meaningless values"
+  - id: vwap_session_reset
+    condition: "cumulative_reset_at_open == 'true'"
+    severity: high
+    message: "VWAP cumulative sums must reset at market open (9:30 AM ET)"
+```
+
 ## Sources
 
 - CFA Institute, "Volume-Weighted Average Price (VWAP)"

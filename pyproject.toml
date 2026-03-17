@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-context-hub"
-version = "0.1.0"
+version = "0.2.0"
 description = "The missing knowledge layer for AI agents. Curated, agent-readable context for trading, healthcare, legal, and more."
 readme = "README.md"
 license = "MIT"
@@ -19,6 +19,13 @@ keywords = [
     "hallucination",
     "knowledge-layer",
     "llm",
+    "regulatory-compliance",
+    "pdt-rule",
+    "trading-agent",
+    "finra",
+    "mcp",
+    "domain-knowledge",
+    "wash-sale",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

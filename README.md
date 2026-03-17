@@ -18,6 +18,22 @@ The context-file pattern -- pioneered by projects like CLAUDE.md, AGENTS.md, and
 
 Instead of hoping your agent "knows" the PDT rule, you give it a verified, structured document it can reference before making decisions. Every document includes severity levels, agent checklists, real-world examples, and primary-source citations. The result: fewer hallucinations, fewer costly mistakes, and agents that know the boundaries of their knowledge.
 
+## The Difference
+
+**Without achub:**
+> User: "Sell AAPL at a loss and buy back next week for tax-loss harvesting."
+>
+> Agent: "Done. Sold AAPL at a $3,000 loss and placed a buy order for next Tuesday."
+>
+> Result: Wash sale violation. The $3,000 loss is disallowed by the IRS.
+
+**With achub:**
+> User: "Sell AAPL at a loss and buy back next week for tax-loss harvesting."
+>
+> Agent calls `achub_search("wash sale tax loss harvesting")`, reads the rule, and responds:
+>
+> "I cannot repurchase AAPL within 30 days of a loss sale -- this would trigger a wash sale under IRC Section 1091, disallowing the $3,000 loss deduction. You can either wait 31 days to repurchase, or buy a non-substantially-identical alternative (e.g., MSFT) now."
+
 ## Quick Start
 
 ### Install
@@ -178,14 +194,29 @@ class DomainContextTool(BaseTool):
         return results[0]["body"]
 ```
 
-### MCP Server (coming soon)
+### MCP Server
 
-The MCP integration will expose achub content as Model Context Protocol resources and tools, enabling Claude and other MCP-compatible agents to access domain knowledge natively.
+Expose achub as a Model Context Protocol server for Claude and other MCP-compatible agents.
 
 ```bash
 pip install agent-context-hub[mcp]
 achub mcp serve
 ```
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "achub": {
+      "command": "achub",
+      "args": ["mcp", "serve"]
+    }
+  }
+}
+```
+
+Available MCP tools: `achub_search`, `achub_get`, `achub_check`, `achub_list`.
 
 See [docs/agent-integration.md](docs/agent-integration.md) for complete integration patterns, best practices, and advanced usage.
 
@@ -285,6 +316,16 @@ Adding a new domain is a four-step process:
 The quality bar: every document must have primary-source citations, a verified date within 6 months, and an agent-actionable checklist. No unsourced claims.
 
 See [docs/adding-a-domain.md](docs/adding-a-domain.md) for the full step-by-step guide including schemas, benchmarks, and the PR checklist.
+
+## Performance
+
+| Operation | Time | Notes |
+|---|---|---|
+| `registry.build()` | ~50ms | 8 docs, O(n) with doc count |
+| `registry.search()` | <1ms | TF-IDF over current corpus |
+| Memory footprint | ~1MB | Index scales linearly with content |
+
+No external APIs, no embedding models, no database. Pure Python TF-IDF.
 
 ## Roadmap
 

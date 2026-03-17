@@ -46,3 +46,10 @@ main.add_command(regime)
 main.add_command(annotate)
 main.add_command(feedback)
 main.add_command(benchmark)
+
+# MCP command — lazy import, graceful if mcp not installed
+try:
+    from achub.commands.mcp_serve import mcp
+    main.add_command(mcp)
+except Exception:
+    pass

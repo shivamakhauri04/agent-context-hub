@@ -110,3 +110,15 @@ def achub_get(content_id: str) -> str:
 #
 # result = crew.kickoff()
 # print(result)
+
+if __name__ == "__main__":
+    try:
+        import crewai  # noqa: F401
+    except ImportError:
+        print("CrewAI not installed. Run: pip install crewai")
+        print("This example shows how to define achub tools for CrewAI agents.")
+        raise SystemExit(1)
+
+    # Quick test: verify tools work
+    print("Search result:", achub_search("wash sale rule")[:200])
+    print("Get result:", achub_get("trading/regulations/wash-sale/rules")[:200])

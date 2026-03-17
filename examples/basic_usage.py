@@ -24,11 +24,13 @@ def main() -> None:
         score = result.get("score", 0.0)
         print(f"  [{score:.2f}] {content_id}")
 
-    # Get specific content
+    # Get specific content (handle None)
     content = registry.get("trading/regulations/pdt-rule/rules")
-    if content:
+    if content is not None:
         print(f"\n## {content['metadata']['title']}")
         print(content["body"][:500])
+    else:
+        print("\nContent 'trading/regulations/pdt-rule/rules' not found.")
 
 
 if __name__ == "__main__":

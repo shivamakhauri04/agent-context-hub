@@ -155,6 +155,24 @@ However, each account independently tracks its own count.
 - [ ] Handle the broker's PDT flag — query account status via API before trading
 - [ ] Test PDT tracking in paper trading (most brokers enforce it there too)
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: pdt_count_check
+    condition: "day_trades_count_5d < 4 OR account_type == 'cash' OR equity >= 25000"
+    severity: critical
+    message: "PDT violation: 4th day trade on margin account under $25k"
+  - id: pdt_equity_warning
+    condition: "equity >= 25000 OR account_type == 'cash'"
+    severity: high
+    message: "Margin account equity below $25k PDT threshold"
+  - id: pdt_margin_awareness
+    condition: "account_type == 'cash' OR equity >= 25000 OR day_trades_count_5d < 3"
+    severity: medium
+    message: "Approaching PDT limit: 3 day trades on margin account under $25k"
+```
+
 ## Sources
 
 - FINRA Rule 4210 (Margin Requirements): https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210

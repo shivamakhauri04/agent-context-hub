@@ -39,8 +39,14 @@ Trading agents performing tax-loss harvesting frequently violate the wash sale r
    - Contracts or rights to acquire the same stock
    - Bonds from the same issuer with similar terms
    - **NOT substantially identical:** Different companies in the same sector (sell AAPL, buy MSFT is fine), different index funds tracking different indices (sell S&P 500 fund, buy Total Market fund — generally OK but consult tax advisor)
+   - **Same-index ETFs are risky:** SPDR S&P 500 (SPY) vs iShares S&P 500 (IVV) track the same index. The IRS has no definitive guidance, but same-index funds are widely considered substantially identical by tax professionals. Treat them as such.
+   - **Mutual fund to ETF of same index:** Selling Vanguard 500 Index Fund and buying VOO (same index) is almost certainly a wash sale.
 
-3. **The disallowed loss is NOT gone forever.** When a wash sale occurs, the disallowed loss is added to the cost basis of the replacement shares. This defers the tax benefit to when the replacement shares are eventually sold.
+3. **Spouse purchases trigger wash sale (Rev. Rul. 2008-5).** If you sell a security at a loss and your spouse buys the same or substantially identical security within the 30-day window, the wash sale rule applies. This is per Revenue Ruling 2008-5.
+
+4. **Cross-account applicability.** The wash sale rule applies across ALL accounts owned by the same taxpayer: taxable brokerage, IRA (traditional and Roth), 401(k), and any other accounts. Selling at a loss in a taxable account and buying in an IRA within 30 days triggers a wash sale — and the loss is permanently disallowed (not added to IRA cost basis).
+
+5. **The disallowed loss is NOT gone forever (it is deferred).** When a wash sale occurs, the disallowed loss is added to the cost basis of the replacement shares. This defers the tax benefit to when the replacement shares are eventually sold.
 
 4. **Partial wash sales are possible.** If you sell 100 shares at a loss and buy back only 50 within the window, only 50 shares' worth of loss is disallowed. The other 50 shares' loss is deductible.
 
@@ -175,9 +181,27 @@ or buy a non-substantially-identical alternative (e.g., GOOGL) on Dec 20.
 - [ ] Persist all trade history — wash sale detection requires at least 61 days of lookback
 - [ ] Log wash sale detections with full details for tax reporting (Form 8949)
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: wash_sale_window_check
+    condition: "days_since_loss_sale > 30 OR no_repurchase == 'true'"
+    severity: critical
+    message: "Potential wash sale: same security repurchased within 30-day window"
+  - id: wash_sale_cross_account
+    condition: "cross_account_purchases == 0"
+    severity: high
+    message: "Wash sale risk: same security purchased in another account within window"
+  - id: wash_sale_spouse_check
+    condition: "spouse_purchases_same_security == 0"
+    severity: high
+    message: "Wash sale risk: spouse purchased same security within 30-day window"
+```
+
 ## Sources
 
-- IRS Publication 550, "Investment Income and Expenses": https://www.irs.gov/publications/p550
-- Internal Revenue Code Section 1091: https://www.law.cornell.edu/uscode/text/26/1091
-- IRS Form 8949, "Sales and Other Dispositions of Capital Assets"
-- Revenue Ruling 2008-5 (wash sales across IRAs and taxable accounts)
+- IRS Publication 550, "Investment Income and Expenses" (Chapter 4 — Wash Sales): https://www.irs.gov/publications/p550 (accessed 2026-03-01)
+- Internal Revenue Code Section 1091: https://www.law.cornell.edu/uscode/text/26/1091 (accessed 2026-03-01)
+- IRS Form 8949 Instructions, "Sales and Other Dispositions of Capital Assets": https://www.irs.gov/forms-pubs/about-form-8949 (accessed 2026-03-01)
+- Revenue Ruling 2008-5 (wash sales involving IRAs): https://www.irs.gov/irb/2008-03_IRB#RR-2008-5 (accessed 2026-03-01)

@@ -170,6 +170,20 @@ adjusted = adjust_for_split(position, 4.0)
 - [ ] Log all split adjustments with before/after values for audit trail
 - [ ] Check options positions separately — strike prices and contract sizes change
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: split_price_adjustment
+    condition: "price_adjusted_for_split == 'true'"
+    severity: critical
+    message: "Historical prices not adjusted for stock split — signals will be wrong"
+  - id: split_order_adjustment
+    condition: "pending_orders_adjusted == 'true' OR no_pending_orders == 'true'"
+    severity: critical
+    message: "Pending limit/stop orders not adjusted for stock split ratio"
+```
+
 ## Sources
 
 - NYSE Listed Company Manual Section 703: Stock Splits

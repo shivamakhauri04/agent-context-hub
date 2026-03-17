@@ -8,6 +8,7 @@
   ],
   "recent_trades": [
     {"symbol": "TSLA", "action": "sell", "quantity": 10, "price": 165.00, "date": "2026-03-01", "pnl": -2500.00},
+    {"symbol": "TSLA", "action": "buy", "quantity": 10, "price": 170.00, "date": "2026-03-15", "pnl": 0},
     {"symbol": "NVDA", "action": "buy", "quantity": 5, "price": 890.00, "date": "2026-03-10", "pnl": 0},
     {"symbol": "NVDA", "action": "sell", "quantity": 5, "price": 895.00, "date": "2026-03-10", "pnl": 25.00},
     {"symbol": "SPY", "action": "buy", "quantity": 20, "price": 520.00, "date": "2026-03-12", "pnl": 0},

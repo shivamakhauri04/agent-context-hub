@@ -66,6 +66,34 @@ def test_wash_sale_detected() -> None:
     assert any("WASH SALE" in w and "TSLA" in w for w in warnings)
 
 
+def test_wash_sale_detected_action_pnl_fields() -> None:
+    """TSLA sold at loss using action/pnl fields (sample_portfolio.json format)."""
+    portfolio = {
+        "recent_trades": [
+            {
+                "symbol": "TSLA",
+                "action": "sell",
+                "quantity": 10,
+                "price": 165.00,
+                "date": "2026-03-01",
+                "pnl": -2500.00,
+            },
+            {
+                "symbol": "TSLA",
+                "action": "buy",
+                "quantity": 10,
+                "price": 170.00,
+                "date": "2026-03-16",
+                "pnl": 0,
+            },
+        ],
+        "positions": [],
+    }
+    warnings = _check_wash_sale(portfolio)
+    assert len(warnings) >= 1
+    assert any("WASH SALE" in w and "TSLA" in w for w in warnings)
+
+
 def test_wash_sale_no_violation() -> None:
     """TSLA sold at loss 45 days ago and repurchased -> no violation."""
     portfolio = {

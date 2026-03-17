@@ -114,3 +114,17 @@ class AchubGetTool(BaseTool):
 #     "this week. Can I make another day trade today?"
 # )
 # print(response)
+
+if __name__ == "__main__":
+    try:
+        import langchain  # noqa: F401
+    except ImportError:
+        print("LangChain not installed. Run: pip install langchain langchain-openai")
+        print("This example shows how to define achub tools for LangChain agents.")
+        raise SystemExit(1)
+
+    # Quick test: verify tools can be instantiated
+    search_tool = AchubSearchTool()
+    get_tool = AchubGetTool()
+    print(f"Tools ready: {search_tool.name}, {get_tool.name}")
+    print("Search result:", search_tool._run("pattern day trader")[:200])

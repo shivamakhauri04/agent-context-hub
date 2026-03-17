@@ -39,24 +39,58 @@ def _check_pdt(portfolio: dict) -> list[str]:
     return violations
 
 
+# Mapping of ETFs tracking the same index (substantially identical heuristic)
+_SAME_INDEX_ETFS = {
+    "SPY": "SP500", "IVV": "SP500", "VOO": "SP500",
+    "QQQ": "NASDAQ100", "QQQM": "NASDAQ100",
+    "IWM": "RUSSELL2000", "VTWO": "RUSSELL2000",
+    "VTI": "TOTAL_US", "ITOT": "TOTAL_US", "SPTM": "TOTAL_US",
+    "VXUS": "INTL_EX_US", "IXUS": "INTL_EX_US",
+    "AGG": "US_AGG_BOND", "BND": "US_AGG_BOND", "SCHZ": "US_AGG_BOND",
+}
+
+
+def _are_substantially_identical(sym1: str, sym2: str) -> bool:
+    """Check if two symbols are substantially identical for wash sale purposes."""
+    if sym1 == sym2:
+        return True
+    # Options on same underlying (simplified: AAPL vs AAPL_C250)
+    base1 = sym1.split("_")[0] if "_" in sym1 else sym1
+    base2 = sym2.split("_")[0] if "_" in sym2 else sym2
+    if base1 == base2:
+        return True
+    # Same-index ETFs
+    idx1 = _SAME_INDEX_ETFS.get(sym1)
+    idx2 = _SAME_INDEX_ETFS.get(sym2)
+    if idx1 and idx2 and idx1 == idx2:
+        return True
+    return False
+
+
 def _check_wash_sale(portfolio: dict) -> list[str]:
     """Check for potential wash sale violations.
 
     Wash sale rule: if a security is sold at a loss and the same or substantially
     identical security is purchased within 30 days before or after the sale.
+    Checks across main trades, spouse trades, and other accounts.
     """
     violations: list[str] = []
     recent_trades = portfolio.get("recent_trades", [])
     positions = portfolio.get("positions", [])
+    spouse_trades = portfolio.get("spouse_trades", [])
+    other_account_trades = portfolio.get("other_accounts", [])
+
+    # Combine all buy sources for cross-account checking
+    all_buy_trades = list(recent_trades) + list(spouse_trades) + list(other_account_trades)
 
     # Collect current position symbols
     position_symbols = {p.get("symbol", "").upper() for p in positions}
 
     # Find loss sales
     for trade in recent_trades:
-        if trade.get("side", "").lower() != "sell":
+        if trade.get("action", trade.get("side", "")).lower() != "sell":
             continue
-        if trade.get("realized_pnl", 0) >= 0:
+        if trade.get("pnl", trade.get("realized_pnl", 0)) >= 0:
             continue
 
         symbol = trade.get("symbol", "").upper()
@@ -69,36 +103,47 @@ def _check_wash_sale(portfolio: dict) -> list[str]:
         except ValueError:
             continue
 
-        # Check if same symbol is still held in positions
-        if symbol in position_symbols:
-            violations.append(
-                f"WASH SALE WARNING: {symbol} sold at a loss on {sell_date_str} "
-                f"but still held in positions."
-            )
-            continue
-
-        # Check if same symbol was bought within 30 days
-        for other_trade in recent_trades:
-            if other_trade.get("side", "").lower() != "buy":
-                continue
-            if other_trade.get("symbol", "").upper() != symbol:
-                continue
-
-            buy_date_str = other_trade.get("date", "")
-            if not buy_date_str:
-                continue
-
-            try:
-                buy_date = datetime.strptime(buy_date_str, "%Y-%m-%d")
-            except ValueError:
-                continue
-
-            delta = abs((buy_date - sell_date).days)
-            if delta <= 30:
+        # Check if same or substantially identical symbol is still held
+        for pos_sym in position_symbols:
+            if _are_substantially_identical(symbol, pos_sym):
                 violations.append(
                     f"WASH SALE WARNING: {symbol} sold at a loss on {sell_date_str} "
-                    f"and repurchased on {buy_date_str} ({delta} days apart, within 30-day window)."
+                    f"but {'same' if symbol == pos_sym else 'substantially identical'} "
+                    f"security {pos_sym} still held in positions."
                 )
+                break
+        else:
+            # Check if same or substantially identical symbol was bought within 30 days
+            for other_trade in all_buy_trades:
+                if other_trade.get("action", other_trade.get("side", "")).lower() != "buy":
+                    continue
+                other_symbol = other_trade.get("symbol", "").upper()
+                if not _are_substantially_identical(symbol, other_symbol):
+                    continue
+
+                buy_date_str = other_trade.get("date", "")
+                if not buy_date_str:
+                    continue
+
+                try:
+                    buy_date = datetime.strptime(buy_date_str, "%Y-%m-%d")
+                except ValueError:
+                    continue
+
+                delta = abs((buy_date - sell_date).days)
+                if delta <= 30:
+                    source = ""
+                    if other_trade in spouse_trades:
+                        source = " (spouse account)"
+                    elif other_trade in other_account_trades:
+                        source = " (other account)"
+                    identical = "same" if symbol == other_symbol else "substantially identical"
+                    violations.append(
+                        f"WASH SALE WARNING: {symbol} sold at a loss on {sell_date_str} "
+                        f"and {identical} security {other_symbol} repurchased on "
+                        f"{buy_date_str} ({delta} days apart, within 30-day window)"
+                        f"{source}."
+                    )
 
     return violations
 
@@ -122,8 +167,14 @@ _RULE_CHECKERS = {
     type=click.Path(exists=True),
     help="Path to portfolio JSON file.",
 )
+@click.option(
+    "--structured",
+    is_flag=True,
+    default=False,
+    help="Also evaluate structured checks from content docs.",
+)
 @click.pass_context
-def check(ctx, domain: str, rules: str, portfolio: str):
+def check(ctx, domain: str, rules: str, portfolio: str, structured: bool):
     """Run rule checks against a portfolio.
 
     Checks trading rules like PDT and wash-sale against your portfolio state.
@@ -144,6 +195,26 @@ def check(ctx, domain: str, rules: str, portfolio: str):
             continue
         violations = checker(portfolio_data)
         all_violations.extend(violations)
+
+    if structured:
+        from achub.core.checker import StructuredCheckEvaluator
+        from achub.core.registry import ContentRegistry
+
+        project_root = ctx.obj["project_root"]
+        registry = ContentRegistry(project_root)
+        registry.build()
+        evaluator = StructuredCheckEvaluator()
+        items = registry.list_all(domain=domain)
+        for item in items:
+            checks = item.get("checks", [])
+            if not checks:
+                continue
+            results = evaluator.evaluate_checks(checks, portfolio_data)
+            for r in results:
+                if not r.passed:
+                    all_violations.append(
+                        f"[{r.severity.upper()}] {r.id}: {r.message}"
+                    )
 
     if all_violations:
         panel_lines = "\n".join(f"[red]- {v}[/red]" for v in all_violations)

@@ -114,6 +114,20 @@ time.sleep(1)
 - [ ] For multi-ticker downloads, verify all requested tickers are present in the result
 - [ ] Never use yfinance for intraday data older than 60 days
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: yfinance_empty_check
+    condition: "dataframe_empty == 'false'"
+    severity: critical
+    message: "yfinance returned empty DataFrame — ticker may be invalid or delisted"
+  - id: yfinance_auto_adjust
+    condition: "auto_adjust_explicit == 'true'"
+    severity: high
+    message: "auto_adjust parameter not explicitly set — prices may be unexpectedly adjusted"
+```
+
 ## Sources
 
 - yfinance GitHub repository: https://github.com/ranaroussi/yfinance

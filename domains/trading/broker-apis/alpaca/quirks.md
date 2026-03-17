@@ -173,6 +173,20 @@ def place_extended_hours_order(api, ticker, qty, limit_price):
 - [ ] Separate data WebSocket and trade update WebSocket connections
 - [ ] Handle order replacement failures gracefully (check for partial fills before replacing)
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: alpaca_extended_hours_order_type
+    condition: "extended_hours == 'false' OR order_type == 'limit'"
+    severity: high
+    message: "Extended hours trading requires limit orders on Alpaca"
+  - id: alpaca_fractional_order_type
+    condition: "is_fractional == 'false' OR order_type == 'market' OR order_type == 'limit'"
+    severity: high
+    message: "Fractional shares only support market/limit orders on Alpaca"
+```
+
 ## Sources
 
 - Alpaca API Documentation: https://docs.alpaca.markets

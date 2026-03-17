@@ -219,21 +219,57 @@ class ComplianceCheckTool(BaseTool):
         return result.stdout or result.stderr
 ```
 
-## MCP Server (Coming Soon)
+## MCP Server
 
-The MCP integration will expose achub as a Model Context Protocol server, allowing Claude and other MCP-compatible agents to access content natively.
+The MCP integration exposes achub as a Model Context Protocol server, allowing Claude and other MCP-compatible agents to access content natively.
 
-Planned capabilities:
-
-- **Resource**: `achub://content/{content_id}` -- Fetch any content document as a resource
-- **Tool**: `achub_search` -- Search content by query
-- **Tool**: `achub_check` -- Run compliance checks
-
-To use once available:
+### Setup
 
 ```bash
 pip install agent-context-hub[mcp]
 achub mcp serve
+```
+
+### Claude Desktop configuration
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "achub": {
+      "command": "achub",
+      "args": ["mcp", "serve"]
+    }
+  }
+}
+```
+
+### Available tools
+
+| Tool | Description | Parameters |
+|---|---|---|
+| `achub_search` | Search content by query | `query`, `domain?` |
+| `achub_get` | Retrieve content by ID | `content_id`, `format?` (llm/json/markdown) |
+| `achub_check` | Run compliance checks | `domain`, `rules`, `portfolio_json` |
+| `achub_list` | List available content | `domain?`, `category?` |
+
+### Example invocations
+
+```
+# Claude will call these tools automatically when relevant:
+
+achub_search(query="wash sale rule", domain="trading")
+# Returns: ranked list of matching content with scores
+
+achub_get(content_id="trading/regulations/wash-sale/rules", format="llm")
+# Returns: token-efficient content for the wash sale rule
+
+achub_check(domain="trading", rules="pdt,wash-sale", portfolio_json='{"account_type": "margin", ...}')
+# Returns: {violations: [...], passed: [...], has_violations: true/false}
+
+achub_list(domain="trading", category="regulations")
+# Returns: list of all regulation content docs
 ```
 
 ## Best Practices

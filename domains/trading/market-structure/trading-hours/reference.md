@@ -202,6 +202,20 @@ def adjust_for_session(order_qty: int, session: str) -> int:
 - [ ] Do not schedule recurring tasks (like daily rebalancing) at exactly 4:00 PM — the market might close at 1:00 PM on half days
 - [ ] Test agent behavior on holidays and weekends — ensure it does not crash or submit orders
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: market_open_check
+    condition: "is_market_open == 'true' OR order_type == 'limit'"
+    severity: high
+    message: "Market order submitted outside regular trading hours"
+  - id: half_day_check
+    condition: "is_half_day == 'false' OR current_hour < 13"
+    severity: medium
+    message: "Trading after 1:00 PM on half day — market is closed"
+```
+
 ## Sources
 
 - NYSE Holiday Calendar: https://www.nyse.com/markets/hours-calendars

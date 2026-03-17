@@ -154,6 +154,20 @@ def get_polygon_aggs(ticker, date):
 - [ ] Handle 403 (forbidden) responses as plan-tier limitations, not transient errors
 - [ ] Test with market-closed periods to ensure agent handles empty responses correctly
 
+## Structured Checks
+
+```yaml
+checks:
+  - id: polygon_rate_limit
+    condition: "requests_per_minute <= 5 OR tier != 'free'"
+    severity: high
+    message: "Exceeding Polygon free tier rate limit (5 calls/minute)"
+  - id: polygon_data_delay
+    condition: "tier != 'free' OR accepts_delayed_data == 'true'"
+    severity: medium
+    message: "Polygon free tier data is delayed 15 minutes"
+```
+
 ## Sources
 
 - Polygon.io API documentation: https://polygon.io/docs
