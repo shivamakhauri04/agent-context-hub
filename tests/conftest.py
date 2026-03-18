@@ -530,3 +530,115 @@ def suitability_portfolio() -> dict:
         "turnover_ratio_annual": 8.5,
         "cost_equity_ratio_annual": 0.25,
     }
+
+
+@pytest.fixture()
+def direct_indexing_portfolio() -> dict:
+    """Return a portfolio for direct indexing testing.
+
+    $250K account with individual S&P 500 positions, VOO ETF overlap,
+    and elevated tracking error.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 250000,
+        "cash": 30000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "direct_index_config": {
+            "benchmark_index": "SP500",
+            "minimum_account_size": 100000,
+            "individual_positions": [
+                {"symbol": "AAPL", "weight_pct": 6.5, "unrealized_pnl": -1200},
+                {"symbol": "MSFT", "weight_pct": 5.8, "unrealized_pnl": 800},
+                {"symbol": "GOOGL", "weight_pct": 3.2, "unrealized_pnl": -450},
+            ],
+            "tracking_error_pct": 2.5,
+            "etf_holdings": ["VOO"],
+        },
+    }
+
+
+@pytest.fixture()
+def copy_trading_portfolio() -> dict:
+    """Return a portfolio for copy trading testing.
+
+    Conservative investor copying an aggressive leader with margin/options.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 10000,
+        "cash": 3000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "customer_risk_tolerance": 2,
+        "copy_trading_config": {
+            "leader_username": "aggressive_options_trader",
+            "leader_risk_level": 8,
+            "copy_allocation_usd": 5000,
+            "leader_portfolio_size": 1000000,
+            "leader_uses_margin": True,
+            "leader_uses_options": True,
+        },
+    }
+
+
+@pytest.fixture()
+def margin_lending_portfolio() -> dict:
+    """Return a portfolio for margin lending testing.
+
+    $500K portfolio with $340K loan near maintenance threshold,
+    concentrated collateral.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 500000,
+        "cash": 50000,
+        "day_trades_count_5d": 0,
+        "positions": [
+            {
+                "symbol": "AAPL",
+                "quantity": 500,
+                "avg_cost": 180.00,
+                "current_price": 195.00,
+                "unrealized_pnl": 7500,
+            },
+        ],
+        "recent_trades": [],
+        "margin_loan": {
+            "loan_balance": 340000,
+            "collateral_value": 500000,
+            "maintenance_ltv_pct": 70,
+            "interest_rate_annual": 6.5,
+            "loan_purpose": "general",
+            "largest_collateral_position_pct": 55,
+        },
+    }
+
+
+@pytest.fixture()
+def income_rmd_portfolio() -> dict:
+    """Return a portfolio for income/RMD testing.
+
+    Age 75, traditional IRA, RMD required, under-scheduled distribution,
+    high equity allocation.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 500000,
+        "cash": 40000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "account_holder_age": 75,
+        "rmd_config": {
+            "rmd_required": True,
+            "prior_year_end_balance": 500000,
+            "rmd_amount_scheduled": 15000,
+            "rmd_amount_taken_ytd": 0,
+            "withdrawal_rate_pct": 3.5,
+            "income_equity_pct": 70,
+        },
+    }

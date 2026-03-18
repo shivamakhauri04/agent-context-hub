@@ -1,0 +1,17 @@
+{
+  "account_type": "cash",
+  "equity": 500000,
+  "cash": 40000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "account_holder_age": 75,
+  "rmd_config": {
+    "rmd_required": true,
+    "prior_year_end_balance": 500000,
+    "rmd_amount_scheduled": 15000,
+    "rmd_amount_taken_ytd": 0,
+    "withdrawal_rate_pct": 3.5,
+    "income_equity_pct": 70
+  }
+}

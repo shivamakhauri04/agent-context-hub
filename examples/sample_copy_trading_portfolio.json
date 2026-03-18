@@ -1,0 +1,17 @@
+{
+  "account_type": "margin",
+  "equity": 10000,
+  "cash": 3000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "customer_risk_tolerance": 2,
+  "copy_trading_config": {
+    "leader_username": "aggressive_options_trader",
+    "leader_risk_level": 8,
+    "copy_allocation_usd": 5000,
+    "leader_portfolio_size": 1000000,
+    "leader_uses_margin": true,
+    "leader_uses_options": true
+  }
+}

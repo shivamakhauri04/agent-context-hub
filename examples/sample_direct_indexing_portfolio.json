@@ -1,0 +1,19 @@
+{
+  "account_type": "margin",
+  "equity": 250000,
+  "cash": 30000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "direct_index_config": {
+    "benchmark_index": "SP500",
+    "minimum_account_size": 100000,
+    "individual_positions": [
+      {"symbol": "AAPL", "weight_pct": 6.5, "unrealized_pnl": -1200},
+      {"symbol": "MSFT", "weight_pct": 5.8, "unrealized_pnl": 800},
+      {"symbol": "GOOGL", "weight_pct": 3.2, "unrealized_pnl": -450}
+    ],
+    "tracking_error_pct": 2.5,
+    "etf_holdings": ["VOO"]
+  }
+}

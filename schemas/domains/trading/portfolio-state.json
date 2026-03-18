@@ -435,6 +435,75 @@
       "type": "array",
       "description": "Symbols with dividend reinvestment (DRIP) enabled.",
       "items": {"type": "string"}
+    },
+    "direct_index_config": {
+      "type": "object",
+      "description": "Direct indexing configuration for stock-level TLH.",
+      "properties": {
+        "benchmark_index": {"type": "string"},
+        "minimum_account_size": {"type": "number"},
+        "individual_positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "weight_pct", "unrealized_pnl"],
+            "properties": {
+              "symbol": {"type": "string"},
+              "weight_pct": {"type": "number"},
+              "unrealized_pnl": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "tracking_error_pct": {"type": "number"},
+        "etf_holdings": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "copy_trading_config": {
+      "type": "object",
+      "description": "Copy trading configuration.",
+      "properties": {
+        "leader_username": {"type": "string"},
+        "leader_risk_level": {"type": "integer", "minimum": 1, "maximum": 10},
+        "copy_allocation_usd": {"type": "number"},
+        "leader_portfolio_size": {"type": "number"},
+        "leader_uses_margin": {"type": "boolean"},
+        "leader_uses_options": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "margin_loan": {
+      "type": "object",
+      "description": "Securities-based lending / margin loan configuration.",
+      "properties": {
+        "loan_balance": {"type": "number"},
+        "collateral_value": {"type": "number"},
+        "maintenance_ltv_pct": {"type": "number"},
+        "interest_rate_annual": {"type": "number"},
+        "loan_purpose": {
+          "type": "string",
+          "enum": ["general", "securities_purchase", "real_estate", "other"]
+        },
+        "largest_collateral_position_pct": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "rmd_config": {
+      "type": "object",
+      "description": "Required Minimum Distribution and income portfolio configuration.",
+      "properties": {
+        "rmd_required": {"type": "boolean"},
+        "prior_year_end_balance": {"type": "number"},
+        "rmd_amount_scheduled": {"type": "number"},
+        "rmd_amount_taken_ytd": {"type": "number"},
+        "withdrawal_rate_pct": {"type": "number"},
+        "income_equity_pct": {"type": "number"}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

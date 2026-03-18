@@ -10,12 +10,16 @@ from rich.console import Console
 from rich.panel import Panel
 
 from achub.commands.checkers.asset_location import check_asset_location
+from achub.commands.checkers.copy_trading import check_copy_trading
+from achub.commands.checkers.direct_indexing import check_direct_indexing
 from achub.commands.checkers.drip import check_drip
 from achub.commands.checkers.futures import check_futures_margin
 from achub.commands.checkers.gfv import check_gfv
 from achub.commands.checkers.goal_allocation import check_goal_allocation
+from achub.commands.checkers.income_rmd import check_income_rmd
 from achub.commands.checkers.ira import check_ira_compliance
 from achub.commands.checkers.margin import check_margin_maintenance
+from achub.commands.checkers.margin_lending import check_margin_lending
 from achub.commands.checkers.options import check_options_approval
 from achub.commands.checkers.recurring import check_recurring
 from achub.commands.checkers.short_selling import check_short_selling
@@ -179,6 +183,10 @@ _RULE_CHECKERS = {
     "asset-location": check_asset_location,
     "suitability": check_suitability,
     "drip": check_drip,
+    "direct-indexing": check_direct_indexing,
+    "copy-trading": check_copy_trading,
+    "margin-lending": check_margin_lending,
+    "income-rmd": check_income_rmd,
 }
 
 

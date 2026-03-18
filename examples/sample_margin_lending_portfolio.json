@@ -1,0 +1,19 @@
+{
+  "account_type": "margin",
+  "equity": 500000,
+  "cash": 50000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "AAPL", "quantity": 500, "avg_cost": 180.00, "current_price": 195.00, "unrealized_pnl": 7500},
+    {"symbol": "MSFT", "quantity": 300, "avg_cost": 400.00, "current_price": 420.00, "unrealized_pnl": 6000}
+  ],
+  "recent_trades": [],
+  "margin_loan": {
+    "loan_balance": 340000,
+    "collateral_value": 500000,
+    "maintenance_ltv_pct": 70,
+    "interest_rate_annual": 6.5,
+    "loan_purpose": "general",
+    "largest_collateral_position_pct": 55
+  }
+}

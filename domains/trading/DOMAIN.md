@@ -74,6 +74,10 @@ Automated portfolio management features: rebalancing, recurring investments (DCA
 23. **When optimizing asset location across accounts**, run the `asset-location` checker. Place bonds and REITs in tax-advantaged accounts, keep municipal bonds in taxable, and put highest-growth assets in Roth IRA.
 24. **When recommending strategies to customers**, run the `suitability` checker. Never recommend strategies with risk levels exceeding customer tolerance. Monitor turnover ratio for churning (>6 is red flag). Flag single-position concentrations >25%.
 25. **When managing DRIP settings**, run the `drip` checker. Disable DRIP on any security before tax-loss harvesting it. Check for DRIP + DCA overlap (double-buying). Remember each DRIP purchase creates a separate tax lot and 30-day wash sale window.
+26. **When offering direct indexing**, run the `direct-indexing` checker. Verify the account meets the minimum size threshold ($100K+). Cross-check every stock-level TLH sale against held ETFs tracking the same benchmark (wash sale risk). Monitor tracking error -- halt substitutions when it exceeds 2%.
+27. **When facilitating copy trading**, run the `copy-trading` checker. Compare leader risk level against copier risk tolerance before enabling. Cap copy allocation to 25% of equity per leader. Block IRA accounts from copying margin/options strategies. Warn about size-ratio rounding distortion.
+28. **When offering securities-based lending**, run the `margin-lending` checker. Monitor LTV against maintenance threshold continuously. Warn when LTV is within 5% of the threshold. Flag collateral concentration >50%. Validate loan purpose to prevent Regulation U violations.
+29. **When managing income portfolios and RMDs**, run the `income-rmd` checker. Ensure RMD is scheduled for age 73+ traditional IRA/401(k) holders before December 31. Verify the scheduled amount meets the IRS minimum (prior year-end balance / Uniform Lifetime Table divisor). Flag withdrawal rates above 4% and equity allocations above 60% for age 73+.
 
 ## Severity Levels
 
