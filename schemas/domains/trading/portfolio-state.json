@@ -289,6 +289,152 @@
         },
         "additionalProperties": false
       }
+    },
+    "harvest_opportunities": {
+      "type": "array",
+      "description": "Tax-loss harvesting opportunities identified in the portfolio.",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "unrealized_loss"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "unrealized_loss": {"type": "number"},
+          "holding_days": {"type": "integer"},
+          "proposed_replacement": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "capital_gains_ytd": {
+      "type": "number",
+      "description": "Year-to-date realized capital gains."
+    },
+    "capital_losses_ytd": {
+      "type": "number",
+      "description": "Year-to-date realized capital losses (positive number)."
+    },
+    "loss_carryforward": {
+      "type": "number",
+      "description": "Capital loss carryforward from prior tax years."
+    },
+    "ira_recent_purchases": {
+      "type": "array",
+      "description": "Recent purchases in IRA accounts (for cross-account wash sale check).",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "date"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "date": {"type": "string", "format": "date"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "goal_type": {
+      "type": "string",
+      "enum": [
+        "retirement",
+        "emergency_fund",
+        "house_down_payment",
+        "education",
+        "general_investing"
+      ],
+      "description": "Investment goal type for goal-based allocation."
+    },
+    "goal_time_horizon_years": {
+      "type": "number",
+      "description": "Years until goal target date."
+    },
+    "goal_target_amount": {
+      "type": "number",
+      "description": "Dollar amount target for the investment goal."
+    },
+    "customer_risk_score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Customer risk score (1=conservative, 10=aggressive)."
+    },
+    "goal_equity_pct": {
+      "type": "number",
+      "description": "Percentage of goal portfolio allocated to equities."
+    },
+    "goal_bond_pct": {
+      "type": "number",
+      "description": "Percentage of goal portfolio allocated to bonds."
+    },
+    "goal_cash_pct": {
+      "type": "number",
+      "description": "Percentage of goal portfolio allocated to cash."
+    },
+    "household_accounts": {
+      "type": "array",
+      "description": "All accounts in household for asset location optimization.",
+      "items": {
+        "type": "object",
+        "required": ["account_id", "account_tax_type", "holdings"],
+        "properties": {
+          "account_id": {"type": "string"},
+          "account_tax_type": {
+            "type": "string",
+            "enum": ["taxable", "traditional_ira", "roth_ira", "401k"]
+          },
+          "holdings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["symbol", "asset_category", "allocation_pct"],
+              "properties": {
+                "symbol": {"type": "string"},
+                "asset_category": {"type": "string"},
+                "allocation_pct": {"type": "number"}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "customer_risk_tolerance": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Customer risk tolerance level (1=conservative, 5=aggressive)."
+    },
+    "customer_experience_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Customer trading experience level (1=novice, 5=expert)."
+    },
+    "pending_strategies": {
+      "type": "array",
+      "description": "Pending investment strategies awaiting approval.",
+      "items": {
+        "type": "object",
+        "required": ["strategy", "symbol", "risk_level"],
+        "properties": {
+          "strategy": {"type": "string"},
+          "symbol": {"type": "string"},
+          "risk_level": {"type": "integer"},
+          "complexity": {"type": "integer"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "turnover_ratio_annual": {
+      "type": "number",
+      "description": "Annualized portfolio turnover ratio."
+    },
+    "cost_equity_ratio_annual": {
+      "type": "number",
+      "description": "Annual trading costs as a ratio of account equity."
+    },
+    "drip_enabled_symbols": {
+      "type": "array",
+      "description": "Symbols with dividend reinvestment (DRIP) enabled.",
+      "items": {"type": "string"}
     }
   },
   "additionalProperties": false

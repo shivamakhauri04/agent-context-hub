@@ -372,3 +372,161 @@ def recurring_portfolio() -> dict:
         "recent_trades": [],
         "day_trades_count_5d": 0,
     }
+
+
+@pytest.fixture()
+def tlh_portfolio() -> dict:
+    """Return a portfolio for tax-loss harvesting testing.
+
+    Margin account with harvest opportunities, IRA cross-account risk,
+    and DRIP enabled on a harvest candidate.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 20000,
+        "day_trades_count_5d": 0,
+        "positions": [
+            {
+                "symbol": "VOO",
+                "quantity": 100,
+                "avg_cost": 450.00,
+                "current_price": 420.00,
+                "unrealized_pnl": -3000.00,
+            },
+        ],
+        "recent_trades": [],
+        "harvest_opportunities": [
+            {
+                "symbol": "VOO",
+                "unrealized_loss": 3000,
+                "holding_days": 200,
+                "proposed_replacement": "IVV",
+            },
+            {
+                "symbol": "AAPL",
+                "unrealized_loss": 1000,
+                "holding_days": 90,
+                "proposed_replacement": "MSFT",
+            },
+        ],
+        "capital_gains_ytd": 2000,
+        "capital_losses_ytd": 8000,
+        "loss_carryforward": 0,
+        "ira_recent_purchases": [{"symbol": "AAPL", "date": "2026-03-10"}],
+        "drip_enabled_symbols": ["VOO"],
+    }
+
+
+@pytest.fixture()
+def goal_portfolio() -> dict:
+    """Return a portfolio for goal-based allocation testing.
+
+    Short-horizon house down payment goal with high equity allocation.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 50000,
+        "cash": 10000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "goal_type": "house_down_payment",
+        "goal_time_horizon_years": 2,
+        "goal_target_amount": 60000,
+        "customer_risk_score": 3,
+        "goal_equity_pct": 50,
+        "goal_bond_pct": 30,
+        "goal_cash_pct": 20,
+    }
+
+
+@pytest.fixture()
+def asset_location_portfolio() -> dict:
+    """Return a portfolio for asset location testing.
+
+    Household with bonds/REITs in taxable and munis in IRA.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 500000,
+        "cash": 50000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "household_accounts": [
+            {
+                "account_id": "taxable-1",
+                "account_tax_type": "taxable",
+                "holdings": [
+                    {
+                        "symbol": "BND",
+                        "asset_category": "us_aggregate_bond",
+                        "allocation_pct": 35,
+                    },
+                    {
+                        "symbol": "VNQ",
+                        "asset_category": "reit",
+                        "allocation_pct": 15,
+                    },
+                    {
+                        "symbol": "VTI",
+                        "asset_category": "us_equity_index",
+                        "allocation_pct": 50,
+                    },
+                ],
+            },
+            {
+                "account_id": "ira-1",
+                "account_tax_type": "traditional_ira",
+                "holdings": [
+                    {
+                        "symbol": "MUB",
+                        "asset_category": "municipal_bond",
+                        "allocation_pct": 40,
+                    },
+                    {
+                        "symbol": "VTI",
+                        "asset_category": "us_equity_index",
+                        "allocation_pct": 60,
+                    },
+                ],
+            },
+        ],
+    }
+
+
+@pytest.fixture()
+def suitability_portfolio() -> dict:
+    """Return a portfolio for suitability testing.
+
+    Conservative customer with aggressive pending strategy and high turnover.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 50000,
+        "cash": 10000,
+        "day_trades_count_5d": 0,
+        "positions": [
+            {
+                "symbol": "TSLA",
+                "quantity": 200,
+                "avg_cost": 170.00,
+                "current_price": 175.00,
+                "unrealized_pnl": 1000.00,
+            },
+        ],
+        "recent_trades": [],
+        "customer_risk_tolerance": 2,
+        "customer_experience_level": 2,
+        "pending_strategies": [
+            {
+                "strategy": "naked_put",
+                "symbol": "TSLA",
+                "risk_level": 5,
+                "complexity": 4,
+            },
+        ],
+        "turnover_ratio_annual": 8.5,
+        "cost_equity_ratio_annual": 0.25,
+    }

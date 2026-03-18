@@ -9,13 +9,18 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
+from achub.commands.checkers.asset_location import check_asset_location
+from achub.commands.checkers.drip import check_drip
 from achub.commands.checkers.futures import check_futures_margin
 from achub.commands.checkers.gfv import check_gfv
+from achub.commands.checkers.goal_allocation import check_goal_allocation
 from achub.commands.checkers.ira import check_ira_compliance
 from achub.commands.checkers.margin import check_margin_maintenance
 from achub.commands.checkers.options import check_options_approval
 from achub.commands.checkers.recurring import check_recurring
 from achub.commands.checkers.short_selling import check_short_selling
+from achub.commands.checkers.suitability import check_suitability
+from achub.commands.checkers.tlh import check_tlh
 from achub.commands.checkers.zero_dte import check_zero_dte
 
 console = Console()
@@ -169,6 +174,11 @@ _RULE_CHECKERS = {
     "short-selling": check_short_selling,
     "zero-dte": check_zero_dte,
     "recurring": check_recurring,
+    "tlh": check_tlh,
+    "goal-allocation": check_goal_allocation,
+    "asset-location": check_asset_location,
+    "suitability": check_suitability,
+    "drip": check_drip,
 }
 
 

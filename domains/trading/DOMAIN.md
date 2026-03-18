@@ -69,6 +69,11 @@ Automated portfolio management features: rebalancing, recurring investments (DCA
 18. **When trading 0DTE options**, cap total exposure to a fixed % of equity, verify exercise capital for short positions, and monitor gamma exposure in real-time.
 19. **When managing recurring investments (DCA)**, verify sufficient funds before each scheduled buy, check for wash sale conflicts with recent loss sales, and coordinate with DRIP.
 20. **When selecting order types**, use limit orders for illiquid securities and extended hours, understand stop-limit vs stop-market gap risk, and verify broker support for advanced types (bracket, OCO).
+21. **When performing tax-loss harvesting**, run the `tlh` checker to validate replacement securities are not substantially identical, verify no cross-account IRA purchases within 30 days, and confirm net losses don't exceed the $3,000 annual deduction limit without carryforward tracking.
+22. **When constructing goal-based portfolios**, run the `goal-allocation` checker. Emergency funds must be 100% cash. Short-term goals (<3yr) max 30% equity. Match risk score to allocation. Separate goals into distinct buckets.
+23. **When optimizing asset location across accounts**, run the `asset-location` checker. Place bonds and REITs in tax-advantaged accounts, keep municipal bonds in taxable, and put highest-growth assets in Roth IRA.
+24. **When recommending strategies to customers**, run the `suitability` checker. Never recommend strategies with risk levels exceeding customer tolerance. Monitor turnover ratio for churning (>6 is red flag). Flag single-position concentrations >25%.
+25. **When managing DRIP settings**, run the `drip` checker. Disable DRIP on any security before tax-loss harvesting it. Check for DRIP + DCA overlap (double-buying). Remember each DRIP purchase creates a separate tax lot and 30-day wash sale window.
 
 ## Severity Levels
 

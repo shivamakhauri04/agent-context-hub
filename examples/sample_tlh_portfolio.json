@@ -1,0 +1,22 @@
+{
+  "account_type": "margin",
+  "equity": 100000,
+  "cash": 20000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "VOO", "quantity": 100, "avg_cost": 450.00, "current_price": 420.00, "unrealized_pnl": -3000.00},
+    {"symbol": "AAPL", "quantity": 50, "avg_cost": 200.00, "current_price": 180.00, "unrealized_pnl": -1000.00}
+  ],
+  "recent_trades": [],
+  "harvest_opportunities": [
+    {"symbol": "VOO", "unrealized_loss": 3000, "holding_days": 200, "proposed_replacement": "IVV"},
+    {"symbol": "AAPL", "unrealized_loss": 1000, "holding_days": 90, "proposed_replacement": "MSFT"}
+  ],
+  "capital_gains_ytd": 2000,
+  "capital_losses_ytd": 8000,
+  "loss_carryforward": 0,
+  "ira_recent_purchases": [
+    {"symbol": "AAPL", "date": "2026-03-10"}
+  ],
+  "drip_enabled_symbols": ["VOO"]
+}

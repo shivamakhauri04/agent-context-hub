@@ -77,20 +77,20 @@ achub get trading/regulations/wash-sale/rules --format llm
 
 ## What's Inside (Trading Domain)
 
-The trading domain ships with **27 curated content documents** across 8 categories. Each document has been verified against primary sources and structured for agent consumption.
+The trading domain ships with **31 curated content documents** across 8 categories. Each document has been verified against primary sources and structured for agent consumption.
 
 | Category | Docs | Content IDs |
 |---|---|---|
 | **regulations** | 15 | `pdt-rule`, `wash-sale`, `good-faith-violations`, `short-selling`, `zero-dte-options`, `options-trading`, `margin-requirements`, `futures-trading`, `crypto-trading`, `ira-retirement`, `tax-loss-harvesting`, `suitability`, `ai-communications`, `event-contracts`, `leveraged-inverse-etfs` |
 | **market-structure** | 3 | `trading-hours`, `t1-settlement`, `fractional-shares` |
 | **order-execution** | 2 | `order-types`, `best-execution` |
-| **portfolio-management** | 2 | `automated-rebalancing`, `recurring-investments` |
+| **portfolio-management** | 6 | `automated-rebalancing`, `recurring-investments`, `goal-based-allocation`, `asset-location`, `drip-management`, `cash-management` |
 | **data-vendors** | 2 | `polygon`, `yfinance` |
 | **broker-apis** | 1 | `alpaca` |
 | **corporate-actions** | 1 | `stock-splits` |
 | **technical-indicators** | 1 | `vwap` |
 
-### Compliance Checkers (10 rules)
+### Compliance Checkers (15 rules)
 
 `achub check` runs Python-based compliance checkers against your portfolio JSON:
 
@@ -106,6 +106,11 @@ The trading domain ships with **27 curated content documents** across 8 categori
 | `margin` | FINRA 25% maintenance, Reg T initial margin, house requirements |
 | `futures` | CFTC margin per contract, daily settlement exposure |
 | `ira` | Contribution limits, early withdrawal penalties, Roth income eligibility |
+| `tlh` | Tax-loss harvesting: substantially identical replacements, $3K cap, IRA cross-account wash sales |
+| `goal-allocation` | Goal-based allocation: emergency fund equity, short-horizon risk, risk score mismatch |
+| `asset-location` | Tax-coordinated placement: bonds/REITs in taxable, municipal bonds in IRA |
+| `suitability` | Risk/experience mismatch, churning, cost-to-equity, concentration >25% |
+| `drip` | DRIP + TLH wash sale conflicts, DRIP + DCA double-buying overlap |
 
 ```bash
 # Check a single rule
@@ -274,7 +279,7 @@ See [achub.yaml.example](achub.yaml.example) for a full example.
 | `achub get <content_id>` | Retrieve a document by ID | `--format markdown\|json\|llm` |
 | `achub prompt` | Get mandatory check instructions for a domain | `--domain` |
 | `achub validate [path]` | Validate frontmatter against schema | `--all` for all files |
-| `achub check` | Run compliance checks (10 rules) | `--domain`, `--rules`, `--portfolio` |
+| `achub check` | Run compliance checks (15 rules) | `--domain`, `--rules`, `--portfolio` |
 | `achub regime` | Current market regime and session info | Trading day status, hours |
 | `achub annotate <content_id>` | Add notes to a content document | Stored in `.achub/annotations/` |
 | `achub feedback <content_id>` | Rate and comment on content | Stored in `.achub/feedback/` |

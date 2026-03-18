@@ -1,0 +1,15 @@
+{
+  "account_type": "cash",
+  "equity": 50000,
+  "cash": 10000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "goal_type": "house_down_payment",
+  "goal_time_horizon_years": 2,
+  "goal_target_amount": 60000,
+  "customer_risk_score": 3,
+  "goal_equity_pct": 50,
+  "goal_bond_pct": 30,
+  "goal_cash_pct": 20
+}
