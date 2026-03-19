@@ -9,10 +9,15 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
+from achub.commands.checkers.ai_supervision import check_ai_supervision
+from achub.commands.checkers.alt_investments import check_alt_investments
 from achub.commands.checkers.asset_location import check_asset_location
+from achub.commands.checkers.cash_management import check_cash_management
 from achub.commands.checkers.copy_trading import check_copy_trading
+from achub.commands.checkers.custodial import check_custodial
 from achub.commands.checkers.direct_indexing import check_direct_indexing
 from achub.commands.checkers.drip import check_drip
+from achub.commands.checkers.event_contracts import check_event_contracts
 from achub.commands.checkers.futures import check_futures_margin
 from achub.commands.checkers.gfv import check_gfv
 from achub.commands.checkers.goal_allocation import check_goal_allocation
@@ -187,6 +192,11 @@ _RULE_CHECKERS = {
     "copy-trading": check_copy_trading,
     "margin-lending": check_margin_lending,
     "income-rmd": check_income_rmd,
+    "event-contracts": check_event_contracts,
+    "cash-management": check_cash_management,
+    "custodial": check_custodial,
+    "ai-supervision": check_ai_supervision,
+    "alt-investments": check_alt_investments,
 }
 
 

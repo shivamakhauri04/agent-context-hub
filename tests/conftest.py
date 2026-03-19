@@ -642,3 +642,158 @@ def income_rmd_portfolio() -> dict:
             "income_equity_pct": 70,
         },
     }
+
+
+@pytest.fixture()
+def event_contracts_portfolio() -> dict:
+    """Return a portfolio for event contracts / prediction markets testing.
+
+    Two positions: economics and finance categories, within limits.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 50000,
+        "cash": 10000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "event_contract_config": {
+            "positions": [
+                {
+                    "event_id": "fed-rate-march-2026",
+                    "direction": "yes",
+                    "contracts": 2000,
+                    "price_per_contract": 0.35,
+                    "event_category": "economics",
+                },
+                {
+                    "event_id": "sp500-above-5500",
+                    "direction": "no",
+                    "contracts": 3000,
+                    "price_per_contract": 0.55,
+                    "event_category": "finance",
+                },
+            ],
+            "platform_position_limit_usd": 50000,
+            "total_exposure_usd": 2350,
+            "collateral_available": 10000,
+        },
+    }
+
+
+@pytest.fixture()
+def cash_management_portfolio() -> dict:
+    """Return a portfolio for cash management / sweep testing.
+
+    Bank deposit sweep across 3 banks, external deposit overlap at Bank A.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 500000,
+        "cash": 35000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "cash_management_config": {
+            "sweep_type": "bank_deposit",
+            "sweep_banks": [
+                {"bank_name": "Partner Bank A", "deposit_amount": 200000},
+                {"bank_name": "Partner Bank B", "deposit_amount": 150000},
+                {"bank_name": "Partner Bank C", "deposit_amount": 100000},
+            ],
+            "external_deposits_same_banks": [
+                {"bank_name": "Partner Bank A", "amount": 80000},
+            ],
+            "idle_cash_exempt": False,
+        },
+    }
+
+
+@pytest.fixture()
+def custodial_portfolio() -> dict:
+    """Return a portfolio for custodial account (UTMA/UGMA) testing.
+
+    14-year-old minor, state majority at 18, moderate unearned income.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 25000,
+        "cash": 3000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "custodial_config": {
+            "is_custodial": True,
+            "minor_age": 14,
+            "state_age_of_majority": 18,
+            "unearned_income_ytd": 1800,
+            "has_options": False,
+            "has_margin": False,
+            "has_futures": False,
+            "has_short_positions": False,
+        },
+    }
+
+
+@pytest.fixture()
+def ai_supervision_portfolio() -> dict:
+    """Return a portfolio for AI supervision compliance testing.
+
+    AI-generated content, fully compliant configuration.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 20000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "ai_supervision_config": {
+            "is_ai_generated": True,
+            "has_risk_disclaimer": True,
+            "contains_return_prediction": False,
+            "suitability_check_completed": True,
+            "interaction_logged": True,
+            "model_version_tracked": True,
+            "supervisory_review_enabled": True,
+        },
+    }
+
+
+@pytest.fixture()
+def alt_investments_portfolio() -> dict:
+    """Return a portfolio for alternative investments testing.
+
+    Accredited investor with liquid alt ETFs, within concentration cap.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 200000,
+        "cash": 15000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "customer_experience_level": 4,
+        "alt_investment_config": {
+            "is_accredited_investor": True,
+            "alt_positions": [
+                {
+                    "symbol": "QAI",
+                    "value_usd": 15000,
+                    "expense_ratio_pct": 0.75,
+                    "is_liquid_alt_etf": True,
+                    "has_lockup": False,
+                    "lockup_days_remaining": 0,
+                },
+                {
+                    "symbol": "BTAL",
+                    "value_usd": 10000,
+                    "expense_ratio_pct": 0.55,
+                    "is_liquid_alt_etf": True,
+                    "has_lockup": False,
+                    "lockup_days_remaining": 0,
+                },
+            ],
+            "alt_allocation_cap_pct": 20,
+        },
+    }

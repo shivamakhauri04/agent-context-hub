@@ -1,0 +1,31 @@
+{
+  "account_type": "cash",
+  "equity": 50000,
+  "cash": 10000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "event_contract_config": {
+    "positions": [
+      {
+        "event_id": "fed-rate-march-2026",
+        "direction": "yes",
+        "contracts": 2000,
+        "price_per_contract": 0.35,
+        "event_category": "economics",
+        "expiration_date": "2026-03-20"
+      },
+      {
+        "event_id": "sp500-above-5500-march",
+        "direction": "no",
+        "contracts": 3000,
+        "price_per_contract": 0.55,
+        "event_category": "finance",
+        "expiration_date": "2026-03-31"
+      }
+    ],
+    "platform_position_limit_usd": 50000,
+    "total_exposure_usd": 2350,
+    "collateral_available": 10000
+  }
+}

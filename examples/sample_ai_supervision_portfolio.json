@@ -1,0 +1,19 @@
+{
+  "account_type": "margin",
+  "equity": 100000,
+  "cash": 20000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "AAPL", "quantity": 100, "avg_cost": 185.00, "current_price": 192.00, "unrealized_pnl": 700}
+  ],
+  "recent_trades": [],
+  "ai_supervision_config": {
+    "is_ai_generated": true,
+    "has_risk_disclaimer": true,
+    "contains_return_prediction": false,
+    "suitability_check_completed": true,
+    "interaction_logged": true,
+    "model_version_tracked": true,
+    "supervisory_review_enabled": true
+  }
+}

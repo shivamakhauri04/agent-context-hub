@@ -1,0 +1,21 @@
+{
+  "account_type": "cash",
+  "equity": 25000,
+  "cash": 3000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "VTI", "quantity": 50, "avg_cost": 220.00, "current_price": 230.00, "unrealized_pnl": 500},
+    {"symbol": "BND", "quantity": 30, "avg_cost": 72.00, "current_price": 73.50, "unrealized_pnl": 45}
+  ],
+  "recent_trades": [],
+  "custodial_config": {
+    "is_custodial": true,
+    "minor_age": 14,
+    "state_age_of_majority": 18,
+    "unearned_income_ytd": 1800,
+    "has_options": false,
+    "has_margin": false,
+    "has_futures": false,
+    "has_short_positions": false
+  }
+}

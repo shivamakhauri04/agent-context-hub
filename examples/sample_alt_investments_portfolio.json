@@ -1,0 +1,33 @@
+{
+  "account_type": "margin",
+  "equity": 200000,
+  "cash": 15000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "VOO", "quantity": 200, "avg_cost": 500.00, "current_price": 520.00, "unrealized_pnl": 4000}
+  ],
+  "recent_trades": [],
+  "customer_experience_level": 4,
+  "alt_investment_config": {
+    "is_accredited_investor": true,
+    "alt_positions": [
+      {
+        "symbol": "QAI",
+        "value_usd": 15000,
+        "expense_ratio_pct": 0.75,
+        "is_liquid_alt_etf": true,
+        "has_lockup": false,
+        "lockup_days_remaining": 0
+      },
+      {
+        "symbol": "BTAL",
+        "value_usd": 10000,
+        "expense_ratio_pct": 0.55,
+        "is_liquid_alt_etf": true,
+        "has_lockup": false,
+        "lockup_days_remaining": 0
+      }
+    ],
+    "alt_allocation_cap_pct": 20
+  }
+}

@@ -504,6 +504,122 @@
         "income_equity_pct": {"type": "number"}
       },
       "additionalProperties": false
+    },
+    "event_contract_config": {
+      "type": "object",
+      "description": "Event contracts / prediction markets configuration.",
+      "properties": {
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["event_id", "direction", "contracts", "price_per_contract"],
+            "properties": {
+              "event_id": {"type": "string"},
+              "direction": {"type": "string", "enum": ["yes", "no"]},
+              "contracts": {"type": "integer"},
+              "price_per_contract": {"type": "number"},
+              "event_category": {"type": "string"},
+              "expiration_date": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "platform_position_limit_usd": {"type": "number"},
+        "total_exposure_usd": {"type": "number"},
+        "collateral_available": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "cash_management_config": {
+      "type": "object",
+      "description": "Cash management and sweep program configuration.",
+      "properties": {
+        "sweep_type": {
+          "type": "string",
+          "enum": ["bank_deposit", "money_market"]
+        },
+        "sweep_banks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["bank_name", "deposit_amount"],
+            "properties": {
+              "bank_name": {"type": "string"},
+              "deposit_amount": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "external_deposits_same_banks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["bank_name", "amount"],
+            "properties": {
+              "bank_name": {"type": "string"},
+              "amount": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "idle_cash_exempt": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "custodial_config": {
+      "type": "object",
+      "description": "Custodial account (UTMA/UGMA) configuration.",
+      "properties": {
+        "is_custodial": {"type": "boolean"},
+        "minor_age": {"type": "integer"},
+        "state_age_of_majority": {"type": "integer"},
+        "unearned_income_ytd": {"type": "number"},
+        "has_options": {"type": "boolean"},
+        "has_margin": {"type": "boolean"},
+        "has_futures": {"type": "boolean"},
+        "has_short_positions": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "ai_supervision_config": {
+      "type": "object",
+      "description": "AI agent supervision and compliance configuration.",
+      "properties": {
+        "is_ai_generated": {"type": "boolean"},
+        "has_risk_disclaimer": {"type": "boolean"},
+        "contains_return_prediction": {"type": "boolean"},
+        "suitability_check_completed": {"type": "boolean"},
+        "interaction_logged": {"type": "boolean"},
+        "model_version_tracked": {"type": "boolean"},
+        "supervisory_review_enabled": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "alt_investment_config": {
+      "type": "object",
+      "description": "Alternative investments compliance configuration.",
+      "properties": {
+        "is_accredited_investor": {"type": "boolean"},
+        "alt_positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "value_usd"],
+            "properties": {
+              "symbol": {"type": "string"},
+              "value_usd": {"type": "number"},
+              "expense_ratio_pct": {"type": "number"},
+              "is_liquid_alt_etf": {"type": "boolean"},
+              "has_lockup": {"type": "boolean"},
+              "lockup_days_remaining": {"type": "integer"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "alt_allocation_cap_pct": {"type": "number"}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
