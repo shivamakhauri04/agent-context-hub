@@ -1,0 +1,21 @@
+{
+  "account_type": "margin",
+  "equity": 150000,
+  "cash": 10000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "esg_config": {
+    "esg_enabled": true,
+    "provider_disclosed": true,
+    "esg_positions": [
+      {"symbol": "ESGU", "esg_score": 82, "esg_label": "ESG Leader", "holds_excluded_sectors": false},
+      {"symbol": "SUSA", "esg_score": 75, "esg_label": "Sustainable", "holds_excluded_sectors": false},
+      {"symbol": "XLE", "esg_score": 30, "esg_label": "Energy Transition", "holds_excluded_sectors": true}
+    ],
+    "exclusion_categories": ["tobacco", "thermal_coal", "controversial_weapons"],
+    "tracking_error_pct": 3.2,
+    "tracking_error_cap_pct": 2.0,
+    "is_erisa_account": false
+  }
+}

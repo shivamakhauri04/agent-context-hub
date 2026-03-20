@@ -1,0 +1,21 @@
+{
+  "account_type": "cash",
+  "equity": 15000000,
+  "cash": 500000,
+  "day_trades_count_5d": 0,
+  "positions": [
+    {"symbol": "VTI", "quantity": 5000, "avg_cost": 220.00, "current_price": 245.00, "unrealized_pnl": 125000}
+  ],
+  "recent_trades": [],
+  "trust_config": {
+    "is_trust_account": true,
+    "trust_type": "irrevocable",
+    "trust_assets_usd": 15000000,
+    "estate_tax_exclusion_usd": 13610000,
+    "trustee_is_beneficiary": true,
+    "has_self_dealing_transaction": false,
+    "annual_distribution_pct": 8.5,
+    "generation_skipping_transfer": true,
+    "gst_exemption_used_usd": 0
+  }
+}

@@ -77,11 +77,11 @@ achub get trading/regulations/wash-sale/rules --format llm
 
 ## What's Inside (Trading Domain)
 
-The trading domain ships with **39 curated content documents** across 8 categories. Each document has been verified against primary sources and structured for agent consumption.
+The trading domain ships with **41 curated content documents** across 8 categories. Each document has been verified against primary sources and structured for agent consumption.
 
 | Category | Docs | Content IDs |
 |---|---|---|
-| **regulations** | 19 | `pdt-rule`, `wash-sale`, `good-faith-violations`, `short-selling`, `zero-dte-options`, `options-trading`, `margin-requirements`, `futures-trading`, `crypto-trading`, `ira-retirement`, `tax-loss-harvesting`, `suitability`, `ai-communications`, `event-contracts`, `leveraged-inverse-etfs`, `copy-trading`, `margin-lending`, `custodial-accounts`, `private-markets` |
+| **regulations** | 21 | `pdt-rule`, `wash-sale`, `good-faith-violations`, `short-selling`, `zero-dte-options`, `options-trading`, `margin-requirements`, `futures-trading`, `crypto-trading`, `ira-retirement`, `tax-loss-harvesting`, `suitability`, `ai-communications`, `event-contracts`, `leveraged-inverse-etfs`, `copy-trading`, `margin-lending`, `custodial-accounts`, `private-markets`, `adversarial-ai`, `trust-accounts` |
 | **market-structure** | 3 | `trading-hours`, `t1-settlement`, `fractional-shares` |
 | **order-execution** | 2 | `order-types`, `best-execution` |
 | **portfolio-management** | 10 | `automated-rebalancing`, `recurring-investments`, `goal-based-allocation`, `asset-location`, `drip-management`, `cash-management`, `direct-indexing`, `esg-screening`, `income-portfolio`, `alternative-investments` |
@@ -90,7 +90,7 @@ The trading domain ships with **39 curated content documents** across 8 categori
 | **corporate-actions** | 1 | `stock-splits` |
 | **technical-indicators** | 1 | `vwap` |
 
-### Compliance Checkers (24 rules)
+### Compliance Checkers (29 rules)
 
 `achub check` runs Python-based compliance checkers against your portfolio JSON:
 
@@ -120,6 +120,11 @@ The trading domain ships with **39 curated content documents** across 8 categori
 | `custodial` | UTMA/UGMA prohibited instruments (options/margin/futures/shorts), kiddie tax, age of majority |
 | `ai-supervision` | FINRA Rule 2210 AI compliance: disclaimers, return predictions, suitability, record retention |
 | `alt-investments` | Accredited investor status, concentration cap, expense ratios, experience suitability |
+| `crypto` | SIPC awareness, crypto wash sale (2025+), staking tax reporting, allocation concentration |
+| `portfolio-drift` | Target allocation drift, severe drift detection, stale rebalance, allocation sum validation |
+| `esg-screening` | Greenwashing detection, ERISA conflicts, provider disclosure, tracking error, ESG score validation |
+| `adversarial-ai` | Prompt injection, data exfiltration, PII filtering, input sanitization, rate limiting |
+| `trust-accounts` | Self-dealing, estate tax exposure, trustee-beneficiary conflicts, GSTT, distribution sustainability |
 
 ```bash
 # Check a single rule
@@ -288,7 +293,7 @@ See [achub.yaml.example](achub.yaml.example) for a full example.
 | `achub get <content_id>` | Retrieve a document by ID | `--format markdown\|json\|llm` |
 | `achub prompt` | Get mandatory check instructions for a domain | `--domain` |
 | `achub validate [path]` | Validate frontmatter against schema | `--all` for all files |
-| `achub check` | Run compliance checks (24 rules) | `--domain`, `--rules`, `--portfolio` |
+| `achub check` | Run compliance checks (29 rules) | `--domain`, `--rules`, `--portfolio` |
 | `achub regime` | Current market regime and session info | Trading day status, hours |
 | `achub annotate <content_id>` | Add notes to a content document | Stored in `.achub/annotations/` |
 | `achub feedback <content_id>` | Rate and comment on content | Stored in `.achub/feedback/` |

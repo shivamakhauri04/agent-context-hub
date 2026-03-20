@@ -620,6 +620,115 @@
         "alt_allocation_cap_pct": {"type": "number"}
       },
       "additionalProperties": false
+    },
+    "last_rebalance_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the last portfolio rebalance (for drift monitoring)."
+    },
+    "crypto_config": {
+      "type": "object",
+      "description": "Crypto trading and compliance configuration.",
+      "properties": {
+        "crypto_positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "quantity", "value_usd"],
+            "properties": {
+              "symbol": {"type": "string"},
+              "quantity": {"type": "number"},
+              "value_usd": {"type": "number"},
+              "is_staking": {"type": "boolean"},
+              "staking_rewards_ytd_usd": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "crypto_allocation_pct": {"type": "number"},
+        "crypto_allocation_cap_pct": {"type": "number"},
+        "sipc_awareness_disclosed": {"type": "boolean"},
+        "wash_sale_tracking_enabled": {"type": "boolean"},
+        "recent_crypto_sales_at_loss": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "date", "loss_usd"],
+            "properties": {
+              "symbol": {"type": "string"},
+              "date": {"type": "string", "format": "date"},
+              "loss_usd": {"type": "number"},
+              "repurchased_within_30d": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "esg_config": {
+      "type": "object",
+      "description": "ESG screening compliance configuration.",
+      "properties": {
+        "esg_enabled": {"type": "boolean"},
+        "provider_disclosed": {"type": "boolean"},
+        "esg_positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "esg_score"],
+            "properties": {
+              "symbol": {"type": "string"},
+              "esg_score": {"type": "number"},
+              "esg_label": {"type": "string"},
+              "holds_excluded_sectors": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "exclusion_categories": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "tracking_error_pct": {"type": "number"},
+        "tracking_error_cap_pct": {"type": "number"},
+        "is_erisa_account": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "adversarial_ai_config": {
+      "type": "object",
+      "description": "Adversarial AI / prompt injection security configuration.",
+      "properties": {
+        "input_sanitization_enabled": {"type": "boolean"},
+        "output_validation_enabled": {"type": "boolean"},
+        "prompt_injection_scan_enabled": {"type": "boolean"},
+        "contains_system_override_attempt": {"type": "boolean"},
+        "contains_data_exfiltration_pattern": {"type": "boolean"},
+        "model_output_contains_pii": {"type": "boolean"},
+        "rate_limit_enabled": {"type": "boolean"},
+        "human_escalation_available": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "trust_config": {
+      "type": "object",
+      "description": "Trust account compliance configuration.",
+      "properties": {
+        "is_trust_account": {"type": "boolean"},
+        "trust_type": {
+          "type": "string",
+          "enum": ["revocable", "irrevocable"]
+        },
+        "trust_assets_usd": {"type": "number"},
+        "estate_tax_exclusion_usd": {"type": "number"},
+        "trustee_is_beneficiary": {"type": "boolean"},
+        "has_self_dealing_transaction": {"type": "boolean"},
+        "annual_distribution_pct": {"type": "number"},
+        "generation_skipping_transfer": {"type": "boolean"},
+        "gst_exemption_used_usd": {"type": "number"}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

@@ -1,0 +1,18 @@
+{
+  "account_type": "margin",
+  "equity": 100000,
+  "cash": 20000,
+  "day_trades_count_5d": 0,
+  "positions": [],
+  "recent_trades": [],
+  "adversarial_ai_config": {
+    "input_sanitization_enabled": false,
+    "output_validation_enabled": false,
+    "prompt_injection_scan_enabled": false,
+    "contains_system_override_attempt": true,
+    "contains_data_exfiltration_pattern": false,
+    "model_output_contains_pii": true,
+    "rate_limit_enabled": false,
+    "human_escalation_available": false
+  }
+}

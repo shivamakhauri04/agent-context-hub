@@ -797,3 +797,156 @@ def alt_investments_portfolio() -> dict:
             "alt_allocation_cap_pct": 20,
         },
     }
+
+
+@pytest.fixture()
+def crypto_portfolio() -> dict:
+    """Return a portfolio for crypto compliance testing.
+
+    BTC/ETH/SOL positions, ETH staking with rewards, over-concentrated.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 15000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "crypto_config": {
+            "crypto_positions": [
+                {
+                    "symbol": "BTC",
+                    "quantity": 0.5,
+                    "value_usd": 30000,
+                    "is_staking": False,
+                    "staking_rewards_ytd_usd": 0,
+                },
+                {
+                    "symbol": "ETH",
+                    "quantity": 10,
+                    "value_usd": 25000,
+                    "is_staking": True,
+                    "staking_rewards_ytd_usd": 850,
+                },
+            ],
+            "crypto_allocation_pct": 55,
+            "crypto_allocation_cap_pct": 20,
+            "sipc_awareness_disclosed": True,
+            "wash_sale_tracking_enabled": True,
+            "recent_crypto_sales_at_loss": [],
+        },
+    }
+
+
+@pytest.fixture()
+def drift_portfolio() -> dict:
+    """Return a portfolio for portfolio drift monitoring testing.
+
+    Target allocations with significant drift in equities and bonds.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 200000,
+        "cash": 20000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "target_allocations": [
+            {"asset_class": "us_equity", "target_pct": 60, "current_pct": 75},
+            {"asset_class": "bonds", "target_pct": 30, "current_pct": 18},
+            {"asset_class": "cash", "target_pct": 10, "current_pct": 7},
+        ],
+        "rebalance_threshold_pct": 5,
+        "last_rebalance_date": "2025-06-15",
+    }
+
+
+@pytest.fixture()
+def esg_portfolio() -> dict:
+    """Return a portfolio for ESG screening testing.
+
+    ESG enabled, provider disclosed, one position with excluded sectors.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 150000,
+        "cash": 10000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "esg_config": {
+            "esg_enabled": True,
+            "provider_disclosed": True,
+            "esg_positions": [
+                {
+                    "symbol": "ESGU",
+                    "esg_score": 82,
+                    "esg_label": "ESG Leader",
+                    "holds_excluded_sectors": False,
+                },
+                {
+                    "symbol": "XLE",
+                    "esg_score": 30,
+                    "esg_label": "Energy Transition",
+                    "holds_excluded_sectors": True,
+                },
+            ],
+            "exclusion_categories": ["tobacco", "thermal_coal"],
+            "tracking_error_pct": 1.5,
+            "tracking_error_cap_pct": 2.0,
+            "is_erisa_account": False,
+        },
+    }
+
+
+@pytest.fixture()
+def adversarial_ai_portfolio() -> dict:
+    """Return a portfolio for adversarial AI testing.
+
+    Fully compliant adversarial AI configuration.
+    """
+    return {
+        "account_type": "margin",
+        "equity": 100000,
+        "cash": 20000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "adversarial_ai_config": {
+            "input_sanitization_enabled": True,
+            "output_validation_enabled": True,
+            "prompt_injection_scan_enabled": True,
+            "contains_system_override_attempt": False,
+            "contains_data_exfiltration_pattern": False,
+            "model_output_contains_pii": False,
+            "rate_limit_enabled": True,
+            "human_escalation_available": True,
+        },
+    }
+
+
+@pytest.fixture()
+def trust_portfolio() -> dict:
+    """Return a portfolio for trust account testing.
+
+    Irrevocable trust, $5M assets, within estate tax exclusion.
+    """
+    return {
+        "account_type": "cash",
+        "equity": 5000000,
+        "cash": 200000,
+        "day_trades_count_5d": 0,
+        "positions": [],
+        "recent_trades": [],
+        "trust_config": {
+            "is_trust_account": True,
+            "trust_type": "irrevocable",
+            "trust_assets_usd": 5000000,
+            "estate_tax_exclusion_usd": 13610000,
+            "trustee_is_beneficiary": False,
+            "has_self_dealing_transaction": False,
+            "annual_distribution_pct": 4,
+            "generation_skipping_transfer": False,
+            "gst_exemption_used_usd": 0,
+        },
+    }

@@ -9,14 +9,17 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
+from achub.commands.checkers.adversarial_ai import check_adversarial_ai
 from achub.commands.checkers.ai_supervision import check_ai_supervision
 from achub.commands.checkers.alt_investments import check_alt_investments
 from achub.commands.checkers.asset_location import check_asset_location
 from achub.commands.checkers.cash_management import check_cash_management
 from achub.commands.checkers.copy_trading import check_copy_trading
+from achub.commands.checkers.crypto import check_crypto
 from achub.commands.checkers.custodial import check_custodial
 from achub.commands.checkers.direct_indexing import check_direct_indexing
 from achub.commands.checkers.drip import check_drip
+from achub.commands.checkers.esg_screening import check_esg_screening
 from achub.commands.checkers.event_contracts import check_event_contracts
 from achub.commands.checkers.futures import check_futures_margin
 from achub.commands.checkers.gfv import check_gfv
@@ -26,10 +29,12 @@ from achub.commands.checkers.ira import check_ira_compliance
 from achub.commands.checkers.margin import check_margin_maintenance
 from achub.commands.checkers.margin_lending import check_margin_lending
 from achub.commands.checkers.options import check_options_approval
+from achub.commands.checkers.portfolio_drift import check_portfolio_drift
 from achub.commands.checkers.recurring import check_recurring
 from achub.commands.checkers.short_selling import check_short_selling
 from achub.commands.checkers.suitability import check_suitability
 from achub.commands.checkers.tlh import check_tlh
+from achub.commands.checkers.trust_accounts import check_trust_accounts
 from achub.commands.checkers.zero_dte import check_zero_dte
 
 console = Console()
@@ -197,6 +202,11 @@ _RULE_CHECKERS = {
     "custodial": check_custodial,
     "ai-supervision": check_ai_supervision,
     "alt-investments": check_alt_investments,
+    "crypto": check_crypto,
+    "portfolio-drift": check_portfolio_drift,
+    "esg-screening": check_esg_screening,
+    "adversarial-ai": check_adversarial_ai,
+    "trust-accounts": check_trust_accounts,
 }
 
 
